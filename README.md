@@ -38,6 +38,30 @@ A data pipeline that turns four messy hospital extracts into clean tables and si
 | 5. (stretch) Inpatient length of stay by hospital | `gold/kpi5_inpatient_length_of_stay` | hospital_id, hospital_name, inpatient_encounters, avg/max_length_of_stay_days |
 | 6. (stretch) Revenue mix by region and service category | `gold/kpi6_region_service_category_mix` | hospital_region, service_category, billed_revenue, share_of_region_pct |
 
+## Final output (AWS run dashboard)
+
+Screenshots of the dashboard built from the files the AWS pipeline wrote to S3 (Step Functions run of batch B20260630).
+
+**Headline numbers, the four Glue steps, KPI 1 (revenue by month) and KPI 2 (billed amount by hospital)**
+
+![Overview, AWS workflow run, KPI 1 and KPI 2](docs/screenshots/01_overview_workflow_kpi1_kpi2.png)
+
+**Data quality: rows read, accepted and quarantined per file, with reject reasons**
+
+![Data quality audit](docs/screenshots/02_data_quality.png)
+
+**KPI 3 (top 10 patients), KPI 4 (patient category profile) and KPI 5 (inpatient length of stay)**
+
+![KPI 3, KPI 4 and KPI 5](docs/screenshots/03_kpi3_kpi4_kpi5.png)
+
+**KPI 6 (revenue mix by region and service category)**
+
+![KPI 6 revenue mix](docs/screenshots/04_kpi6_revenue_mix.png)
+
+**Verification checks and the AWS resources used**
+
+![Verification and AWS resources](docs/screenshots/05_verification_aws_resources.png)
+
 ## Read next
 
 | Document | What is in it |
