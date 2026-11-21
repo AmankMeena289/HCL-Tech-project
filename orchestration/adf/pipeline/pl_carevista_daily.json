@@ -1,0 +1,207 @@
+{
+  "name": "pl_carevista_daily",
+  "properties": {
+    "description": "CareVista healthcare analytics: landing -> bronze -> silver -> gold. One retry per task. Rerunning the same batch_id gives the same result.",
+    "activities": [
+      {
+        "name": "01_Landing",
+        "description": "Copy the 4 staged files unchanged to landing/batch_id=<id>/ and verify SHA-256",
+        "type": "DatabricksNotebook",
+        "dependsOn": [],
+        "policy": {
+          "timeout": "0.01:00:00",
+          "retry": 1,
+          "retryIntervalInSeconds": 60,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "userProperties": [
+          {
+            "name": "batch_id",
+            "value": "@pipeline().parameters.batch_id"
+          }
+        ],
+        "typeProperties": {
+          "notebookPath": "/Workspace/Repos/<your-user>/carevista/notebooks/databricks/00_landing",
+          "baseParameters": {
+            "input_path": {
+              "value": "@pipeline().parameters.input_path",
+              "type": "Expression"
+            },
+            "batch_id": {
+              "value": "@pipeline().parameters.batch_id",
+              "type": "Expression"
+            },
+            "lake_root": {
+              "value": "@pipeline().parameters.lake_root",
+              "type": "Expression"
+            }
+          }
+        },
+        "linkedServiceName": {
+          "referenceName": "ls_azure_databricks",
+          "type": "LinkedServiceReference"
+        }
+      },
+      {
+        "name": "02_Bronze",
+        "description": "Load landed CSVs as text into bronze Delta tables with batch_id, source_file, source_row_num",
+        "type": "DatabricksNotebook",
+        "dependsOn": [
+          {
+            "activity": "01_Landing",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.01:00:00",
+          "retry": 1,
+          "retryIntervalInSeconds": 60,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "userProperties": [
+          {
+            "name": "batch_id",
+            "value": "@pipeline().parameters.batch_id"
+          }
+        ],
+        "typeProperties": {
+          "notebookPath": "/Workspace/Repos/<your-user>/carevista/notebooks/databricks/01_bronze",
+          "baseParameters": {
+            "input_path": {
+              "value": "@pipeline().parameters.input_path",
+              "type": "Expression"
+            },
+            "batch_id": {
+              "value": "@pipeline().parameters.batch_id",
+              "type": "Expression"
+            },
+            "lake_root": {
+              "value": "@pipeline().parameters.lake_root",
+              "type": "Expression"
+            }
+          }
+        },
+        "linkedServiceName": {
+          "referenceName": "ls_azure_databricks",
+          "type": "LinkedServiceReference"
+        }
+      },
+      {
+        "name": "03_Silver",
+        "description": "Cleanse, validate, de-duplicate; write silver + quarantine (overwrite) and audit counts",
+        "type": "DatabricksNotebook",
+        "dependsOn": [
+          {
+            "activity": "02_Bronze",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.01:00:00",
+          "retry": 1,
+          "retryIntervalInSeconds": 60,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "userProperties": [
+          {
+            "name": "batch_id",
+            "value": "@pipeline().parameters.batch_id"
+          }
+        ],
+        "typeProperties": {
+          "notebookPath": "/Workspace/Repos/<your-user>/carevista/notebooks/databricks/02_silver",
+          "baseParameters": {
+            "input_path": {
+              "value": "@pipeline().parameters.input_path",
+              "type": "Expression"
+            },
+            "batch_id": {
+              "value": "@pipeline().parameters.batch_id",
+              "type": "Expression"
+            },
+            "lake_root": {
+              "value": "@pipeline().parameters.lake_root",
+              "type": "Expression"
+            }
+          }
+        },
+        "linkedServiceName": {
+          "referenceName": "ls_azure_databricks",
+          "type": "LinkedServiceReference"
+        }
+      },
+      {
+        "name": "04_Gold",
+        "description": "Build star schema and KPI tables (overwrite)",
+        "type": "DatabricksNotebook",
+        "dependsOn": [
+          {
+            "activity": "03_Silver",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.01:00:00",
+          "retry": 1,
+          "retryIntervalInSeconds": 60,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "userProperties": [
+          {
+            "name": "batch_id",
+            "value": "@pipeline().parameters.batch_id"
+          }
+        ],
+        "typeProperties": {
+          "notebookPath": "/Workspace/Repos/<your-user>/carevista/notebooks/databricks/03_gold",
+          "baseParameters": {
+            "input_path": {
+              "value": "@pipeline().parameters.input_path",
+              "type": "Expression"
+            },
+            "batch_id": {
+              "value": "@pipeline().parameters.batch_id",
+              "type": "Expression"
+            },
+            "lake_root": {
+              "value": "@pipeline().parameters.lake_root",
+              "type": "Expression"
+            }
+          }
+        },
+        "linkedServiceName": {
+          "referenceName": "ls_azure_databricks",
+          "type": "LinkedServiceReference"
+        }
+      }
+    ],
+    "parameters": {
+      "input_path": {
+        "type": "string",
+        "defaultValue": "abfss://staging@<storage-account>.dfs.core.windows.net/carevista/2026-06-30"
+      },
+      "batch_id": {
+        "type": "string",
+        "defaultValue": "B20260630"
+      },
+      "lake_root": {
+        "type": "string",
+        "defaultValue": "abfss://lake@<storage-account>.dfs.core.windows.net/carevista"
+      }
+    },
+    "annotations": [
+      "carevista",
+      "healthcare-analytics"
+    ]
+  }
+}

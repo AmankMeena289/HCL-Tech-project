@@ -1,0 +1,16 @@
+hospital_region,service_category,billed_revenue,share_of_region_pct
+North,Accommodation,695780.65,54.22
+North,Procedure,401628.65,31.30
+North,Diagnostic,77888.95,6.07
+North,Consultation,66462.20,5.18
+North,Medication,41402.25,3.23
+South,Accommodation,377557.20,58.38
+South,Procedure,153040.25,23.66
+South,Diagnostic,48111.50,7.44
+South,Consultation,45390.10,7.02
+South,Medication,22665.85,3.50
+West,Accommodation,337519.60,55.53
+West,Procedure,118892.05,19.56
+West,Diagnostic,64368.60,10.59
+West,Consultation,53492.15,8.80
+West,Medication,33503.45,5.51

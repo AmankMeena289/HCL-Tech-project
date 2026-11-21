@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CareVista Healthcare Analytics - AWS</title>
+<style>
+.viz-root{color-scheme:light;--surface-0:#f4f4f2;--surface-1:#fcfcfb;--border:#e4e3df;--grid:#ecebe7;
+  --text-primary:#0b0b0b;--text-secondary:#52514e;--text-muted:#7a7974;--series-1:#2a78d6;--series-1-soft:#d6e6f8;
+  --good:#0a7d32;--good-bg:#e5f4ea;--critical:#c4302b;}
+:root[data-theme="dark"] .viz-root{color-scheme:dark;--surface-0:#111110;--surface-1:#1a1a19;--border:#2e2d2b;--grid:#262624;
+  --text-primary:#f0efec;--text-secondary:#c3c2b7;--text-muted:#8f8e86;--series-1:#3987e5;--series-1-soft:#1d3350;
+  --good:#3fbf6a;--good-bg:#143321;--critical:#e66767;}
+@media (prefers-color-scheme:dark){:root:where(:not([data-theme="light"])) .viz-root{color-scheme:dark;--surface-0:#111110;--surface-1:#1a1a19;
+  --border:#2e2d2b;--grid:#262624;--text-primary:#f0efec;--text-secondary:#c3c2b7;--text-muted:#8f8e86;--series-1:#3987e5;
+  --series-1-soft:#1d3350;--good:#3fbf6a;--good-bg:#143321;--critical:#e66767;}}
+*{box-sizing:border-box}
+body{margin:0}
+.viz-root{background:var(--surface-0);color:var(--text-primary);font:14px/1.45 "Segoe UI",system-ui,-apple-system,Arial,sans-serif;min-height:100vh}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 24px 60px}
+header{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+h1{font-size:22px;margin:0 0 4px}
+h2{font-size:16px;margin:0 0 2px}
+.sub{color:var(--text-secondary);margin:0}
+.muted{color:var(--text-muted);font-size:12.5px}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;background:var(--good-bg);color:var(--good);font-weight:600;font-size:13px}
+.toolbar{display:flex;gap:8px;align-items:center}
+button{font:inherit;font-size:13px;padding:5px 10px;border-radius:6px;border:1px solid var(--border);background:var(--surface-1);color:var(--text-primary);cursor:pointer}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:16px}
+.tile,.card{background:var(--surface-1);border:1px solid var(--border);border-radius:10px;padding:16px}
+.tile .label{color:var(--text-secondary);font-size:12.5px}
+.tile .value{font-size:26px;font-weight:650;margin:4px 0 2px;font-variant-numeric:tabular-nums}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(460px,1fr));gap:16px;margin-bottom:16px}
+.card{margin-bottom:16px}.grid2 .card{margin-bottom:0}
+.card-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:12px}
+table{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--grid)}
+th{color:var(--text-secondary);font-weight:600;font-size:12px}
+td.num,th.num{text-align:right}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.step{border:1px solid var(--border);border-radius:8px;padding:10px 12px}
+.step .name{font-weight:600}.ok{color:var(--good);font-weight:600}
+/* bar charts (HTML) */
+.bars{display:flex;flex-direction:column;gap:6px}
+.bar-row{display:grid;grid-template-columns:150px 1fr 110px;align-items:center;gap:10px;font-size:13px}
+.bar-track{height:18px;position:relative;border-left:1px solid var(--text-muted)}
+.bar{height:100%;background:var(--series-1);border-radius:0 4px 4px 0;min-width:2px}
+.bar-row:hover .bar,.col:hover .colbar{filter:brightness(1.12)}
+.bar-row .v{text-align:right;color:var(--text-secondary)}
+.cols{display:flex;align-items:flex-end;gap:2px;height:200px;border-bottom:1px solid var(--text-muted);padding:0 4px;position:relative}
+.col{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;padding:0 6px;cursor:default}
+.colbar{width:100%;max-width:56px;background:var(--series-1);border-radius:4px 4px 0 0}
+.col .top{font-size:12px;color:var(--text-secondary);margin-bottom:4px;white-space:nowrap}
+.xlabels{display:flex;gap:2px;padding:4px 4px 0}.xlabels span{flex:1;text-align:center;font-size:12px;color:var(--text-secondary)}
+.gridline{position:absolute;left:0;right:0;border-top:1px dashed var(--grid);z-index:0}.col{position:relative;z-index:1}
+#tip{position:fixed;pointer-events:none;background:var(--surface-1);color:var(--text-primary);border:1px solid var(--border);
+  border-radius:6px;padding:6px 9px;font-size:12.5px;box-shadow:0 4px 14px rgba(0,0,0,.14);display:none;z-index:9;max-width:280px}
+details summary{cursor:pointer;color:var(--text-secondary);font-size:13px;margin-top:10px}
+.check{display:flex;gap:8px;align-items:flex-start;margin:4px 0}
+code{font-family:Consolas,monospace;font-size:12.5px}
+@media (max-width:700px){.steps{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}.bar-row{grid-template-columns:100px 1fr 90px}}
+</style>
+</head>
+<body>
+<div class="viz-root"><div class="wrap">
+<header>
+  <div>
+    <h1>CareVista Healthcare Billing Analytics</h1>
+    <p class="sub">Deployed on AWS: S3, Glue (PySpark and Delta Lake), Step Functions, Athena &middot; batch <b id="batch"></b> &middot; cutoff 30 June 2026</p>
+  </div>
+  <div class="toolbar"><span class="pill" id="status"></span><button id="theme" type="button">Toggle theme</button></div>
+</header>
+
+<section class="tiles" id="tiles"></section>
+
+<section class="card">
+  <div class="card-head"><div><h2>AWS workflow run</h2><span class="muted" id="runname"></span></div><span class="muted" id="region"></span></div>
+  <div class="steps" id="steps"></div>
+</section>
+
+<section class="grid2">
+  <div class="card">
+    <div class="card-head"><h2>Billed revenue by month</h2><span class="muted">INR, all departments (KPI 1)</span></div>
+    <div id="chart-month"></div>
+    <details><summary>By department (table)</summary><div id="tbl-kpi1"></div></details>
+  </div>
+  <div class="card">
+    <div class="card-head"><h2>Billed amount by hospital</h2><span class="muted">INR, all encounter types (KPI 2)</span></div>
+    <div id="chart-hospital"></div>
+    <details><summary>By hospital and encounter type (table)</summary><div id="tbl-kpi2"></div></details>
+  </div>
+</section>
+
+<section class="card">
+  <div class="card-head"><h2>Data quality: rows read, accepted and quarantined</h2><span class="muted">silver step, from audit/pipeline_audit</span></div>
+  <div id="tbl-audit"></div>
+</section>
+
+<section class="grid2">
+  <div class="card"><div class="card-head"><h2>Top 10 patients by billed amount</h2><span class="muted">KPI 3 (no PII)</span></div><div id="tbl-kpi3"></div></div>
+  <div class="card"><div class="card-head"><h2>Patient category profile</h2><span class="muted">KPI 4</span></div><div id="tbl-kpi4"></div>
+    <div class="card-head" style="margin-top:18px"><h2>Inpatient length of stay</h2><span class="muted">KPI 5, days</span></div><div id="tbl-kpi5"></div></div>
+</section>
+
+<section class="card"><div class="card-head"><h2>Revenue mix by region and service category</h2><span class="muted">KPI 6</span></div><div id="tbl-kpi6"></div></section>
+
+<section class="grid2">
+  <div class="card"><h2>Verification</h2><div id="checks" style="margin-top:8px"></div></div>
+  <div class="card"><h2>AWS resources</h2><table id="resources" style="margin-top:8px"></table></div>
+</section>
+<p class="muted">Generated from the files the AWS pipeline wrote to <code id="src"></code>.</p>
+</div></div>
+<div id="tip" role="tooltip"></div>
+
+<script>
+(() => {
+const D = {"kpi1": [{"month": "2026-01", "department": "Consultation", "billed_revenue": "32358.45"}, {"month": "2026-01", "department": "Laboratory", "billed_revenue": "27213.40"}, {"month": "2026-01", "department": "Pharmacy", "billed_revenue": "14502.90"}, {"month": "2026-01", "department": "Procedures", "billed_revenue": "246937.65"}, {"month": "2026-01", "department": "Radiology", "billed_revenue": "5886.70"}, {"month": "2026-01", "department": "Room & Nursing", "billed_revenue": "291522.90"}, {"month": "2026-02", "department": "Consultation", "billed_revenue": "26125.35"}, {"month": "2026-02", "department": "Laboratory", "billed_revenue": "17881.30"}, {"month": "2026-02", "department": "Pharmacy", "billed_revenue": "9301.90"}, {"month": "2026-02", "department": "Procedures", "billed_revenue": "46149.90"}, {"month": "2026-02", "department": "Radiology", "billed_revenue": "10809.55"}, {"month": "2026-02", "department": "Room & Nursing", "billed_revenue": "170787.50"}, {"month": "2026-03", "department": "Consultation", "billed_revenue": "29469.40"}, {"month": "2026-03", "department": "Laboratory", "billed_revenue": "20033.95"}, {"month": "2026-03", "department": "Pharmacy", "billed_revenue": "17875.55"}, {"month": "2026-03", "department": "Procedures", "billed_revenue": "112062.05"}, {"month": "2026-03", "department": "Radiology", "billed_revenue": "10094.20"}, {"month": "2026-03", "department": "Room & Nursing", "billed_revenue": "305135.50"}, {"month": "2026-04", "department": "Consultation", "billed_revenue": "26219.90"}, {"month": "2026-04", "department": "Laboratory", "billed_revenue": "27002.15"}, {"month": "2026-04", "department": "Pharmacy", "billed_revenue": "24865.85"}, {"month": "2026-04", "department": "Procedures", "billed_revenue": "105781.00"}, {"month": "2026-04", "department": "Radiology", "billed_revenue": "14172.95"}, {"month": "2026-04", "department": "Room & Nursing", "billed_revenue": "392253.30"}, {"month": "2026-05", "department": "Consultation", "billed_revenue": "25606.75"}, {"month": "2026-05", "department": "Laboratory", "billed_revenue": "19725.70"}, {"month": "2026-05", "department": "Pharmacy", "billed_revenue": "23917.20"}, {"month": "2026-05", "department": "Procedures", "billed_revenue": "158673.05"}, {"month": "2026-05", "department": "Radiology", "billed_revenue": "11171.05"}, {"month": "2026-05", "department": "Room & Nursing", "billed_revenue": "199823.65"}, {"month": "2026-06", "department": "Consultation", "billed_revenue": "25564.60"}, {"month": "2026-06", "department": "Laboratory", "billed_revenue": "10405.70"}, {"month": "2026-06", "department": "Pharmacy", "billed_revenue": "7108.15"}, {"month": "2026-06", "department": "Procedures", "billed_revenue": "3957.30"}, {"month": "2026-06", "department": "Radiology", "billed_revenue": "15972.40"}, {"month": "2026-06", "department": "Room & Nursing", "billed_revenue": "51334.60"}], "kpi2": [{"hospital_id": "H01", "encounter_type": "Emergency", "eligible_encounters": "4", "billed_amount": "11463.20", "average_bill": "2865.80"}, {"hospital_id": "H01", "encounter_type": "Inpatient", "eligible_encounters": "14", "billed_amount": "709115.90", "average_bill": "50651.14"}, {"hospital_id": "H01", "encounter_type": "Outpatient", "eligible_encounters": "9", "billed_amount": "17277.25", "average_bill": "1919.69"}, {"hospital_id": "H02", "encounter_type": "Emergency", "eligible_encounters": "7", "billed_amount": "18171.05", "average_bill": "2595.86"}, {"hospital_id": "H02", "encounter_type": "Inpatient", "eligible_encounters": "11", "billed_amount": "473833.95", "average_bill": "43075.81"}, {"hospital_id": "H02", "encounter_type": "Outpatient", "eligible_encounters": "22", "billed_amount": "53301.35", "average_bill": "2422.79"}, {"hospital_id": "H03", "encounter_type": "Emergency", "eligible_encounters": "8", "billed_amount": "15650.40", "average_bill": "1956.30"}, {"hospital_id": "H03", "encounter_type": "Inpatient", "eligible_encounters": "9", "billed_amount": "338068.70", "average_bill": "37563.19"}, {"hospital_id": "H03", "encounter_type": "Outpatient", "eligible_encounters": "12", "billed_amount": "19936.95", "average_bill": "1661.41"}, {"hospital_id": "H04", "encounter_type": "Emergency", "eligible_encounters": "7", "billed_amount": "19744.25", "average_bill": "2820.61"}, {"hospital_id": "H04", "encounter_type": "Inpatient", "eligible_encounters": "6", "billed_amount": "239505.45", "average_bill": "39917.58"}, {"hospital_id": "H04", "encounter_type": "Outpatient", "eligible_encounters": "6", "billed_amount": "13859.15", "average_bill": "2309.86"}, {"hospital_id": "H05", "encounter_type": "Emergency", "eligible_encounters": "6", "billed_amount": "16137.70", "average_bill": "2689.62"}, {"hospital_id": "H05", "encounter_type": "Inpatient", "eligible_encounters": "9", "billed_amount": "281910.80", "average_bill": "31323.42"}, {"hospital_id": "H05", "encounter_type": "Outpatient", "eligible_encounters": "9", "billed_amount": "26904.20", "average_bill": "2989.36"}, {"hospital_id": "H06", "encounter_type": "Emergency", "eligible_encounters": "3", "billed_amount": "5527.10", "average_bill": "1842.37"}, {"hospital_id": "H06", "encounter_type": "Inpatient", "eligible_encounters": "8", "billed_amount": "238122.10", "average_bill": "29765.26"}, {"hospital_id": "H06", "encounter_type": "Outpatient", "eligible_encounters": "18", "billed_amount": "39173.95", "average_bill": "2176.33"}], "kpi3": [{"rank": "1", "patient_id": "PT087", "eligible_encounters": "4", "billed_amount": "185207.50"}, {"rank": "2", "patient_id": "PT091", "eligible_encounters": "5", "billed_amount": "164918.75"}, {"rank": "3", "patient_id": "PT088", "eligible_encounters": "6", "billed_amount": "132141.40"}, {"rank": "4", "patient_id": "PT018", "eligible_encounters": "5", "billed_amount": "115978.00"}, {"rank": "5", "patient_id": "PT007", "eligible_encounters": "5", "billed_amount": "109230.30"}, {"rank": "6", "patient_id": "PT095", "eligible_encounters": "7", "billed_amount": "108977.25"}, {"rank": "7", "patient_id": "PT092", "eligible_encounters": "2", "billed_amount": "96121.15"}, {"rank": "8", "patient_id": "PT030", "eligible_encounters": "3", "billed_amount": "84567.05"}, {"rank": "9", "patient_id": "PT024", "eligible_encounters": "7", "billed_amount": "82169.45"}, {"rank": "10", "patient_id": "PT056", "eligible_encounters": "1", "billed_amount": "82005.35"}], "kpi4": [{"patient_category": "SelfPay", "patients": "35", "patients_with_eligible_encounters": "23", "eligible_encounters": "46", "billed_amount": "735921.85", "average_bill": "15998.30"}, {"patient_category": "Insured", "patients": "44", "patients_with_eligible_encounters": "31", "eligible_encounters": "87", "billed_amount": "1327835.80", "average_bill": "15262.48"}, {"patient_category": "Corporate", "patients": "21", "patients_with_eligible_encounters": "12", "eligible_encounters": "35", "billed_amount": "473945.80", "average_bill": "13541.31"}], "kpi5": [{"hospital_id": "H01", "hospital_name": "CareVista Delhi Central", "inpatient_encounters": "14", "avg_length_of_stay_days": "5.04", "max_length_of_stay_days": "8.21"}, {"hospital_id": "H02", "hospital_name": "CareVista Chandigarh", "inpatient_encounters": "11", "avg_length_of_stay_days": "4.61", "max_length_of_stay_days": "8.03"}, {"hospital_id": "H03", "hospital_name": "CareVista Bengaluru", "inpatient_encounters": "9", "avg_length_of_stay_days": "4.21", "max_length_of_stay_days": "8.04"}, {"hospital_id": "H04", "hospital_name": "CareVista Chennai", "inpatient_encounters": "6", "avg_length_of_stay_days": "4.70", "max_length_of_stay_days": "7.90"}, {"hospital_id": "H05", "hospital_name": "CareVista Mumbai", "inpatient_encounters": "9", "avg_length_of_stay_days": "5.11", "max_length_of_stay_days": "8.24"}, {"hospital_id": "H06", "hospital_name": "CareVista Pune", "inpatient_encounters": "8", "avg_length_of_stay_days": "4.50", "max_length_of_stay_days": "7.96"}], "kpi6": [{"hospital_region": "North", "service_category": "Accommodation", "billed_revenue": "695780.65", "share_of_region_pct": "54.22"}, {"hospital_region": "North", "service_category": "Procedure", "billed_revenue": "401628.65", "share_of_region_pct": "31.30"}, {"hospital_region": "North", "service_category": "Diagnostic", "billed_revenue": "77888.95", "share_of_region_pct": "6.07"}, {"hospital_region": "North", "service_category": "Consultation", "billed_revenue": "66462.20", "share_of_region_pct": "5.18"}, {"hospital_region": "North", "service_category": "Medication", "billed_revenue": "41402.25", "share_of_region_pct": "3.23"}, {"hospital_region": "South", "service_category": "Accommodation", "billed_revenue": "377557.20", "share_of_region_pct": "58.38"}, {"hospital_region": "South", "service_category": "Procedure", "billed_revenue": "153040.25", "share_of_region_pct": "23.66"}, {"hospital_region": "South", "service_category": "Diagnostic", "billed_revenue": "48111.50", "share_of_region_pct": "7.44"}, {"hospital_region": "South", "service_category": "Consultation", "billed_revenue": "45390.10", "share_of_region_pct": "7.02"}, {"hospital_region": "South", "service_category": "Medication", "billed_revenue": "22665.85", "share_of_region_pct": "3.50"}, {"hospital_region": "West", "service_category": "Accommodation", "billed_revenue": "337519.60", "share_of_region_pct": "55.53"}, {"hospital_region": "West", "service_category": "Procedure", "billed_revenue": "118892.05", "share_of_region_pct": "19.56"}, {"hospital_region": "West", "service_category": "Diagnostic", "billed_revenue": "64368.60", "share_of_region_pct": "10.59"}, {"hospital_region": "West", "service_category": "Consultation", "billed_revenue": "53492.15", "share_of_region_pct": "8.80"}, {"hospital_region": "West", "service_category": "Medication", "billed_revenue": "33503.45", "share_of_region_pct": "5.51"}], "run": {"batch_id": "B20260630", "status": "SUCCEEDED", "execution": "run-20261121T153055-B20260630", "account": "919315337648", "region": "ap-southeast-2", "total_minutes": "14.1", "steps": [{"name": "Landing", "status": "Succeeded", "duration": "3m 03s", "job": "carevista-01-landing"}, {"name": "Bronze", "status": "Succeeded", "duration": "2m 57s", "job": "carevista-02-bronze"}, {"name": "Silver", "status": "Succeeded", "duration": "4m 06s", "job": "carevista-03-silver"}, {"name": "Gold", "status": "Succeeded", "duration": "3m 58s", "job": "carevista-04-gold"}], "audit": [{"source_file": "encounter_services.csv", "rows_read": 572, "rows_accepted": 531, "rows_rejected": 41, "detail": "L4_ENCOUNTER_REJECTED=16; EXACT_DUPLICATE=8; L2_NON_POSITIVE_QUANTITY=4; L4_UNKNOWN_ENCOUNTER=4; L2_DISCOUNT_OUT_OF_RANGE=3; L2_NEGATIVE_UNIT_PRICE=3; L4_UNKNOWN_SERVICE=3"}, {"source_file": "encounters.csv", "rows_read": 208, "rows_accepted": 194, "rows_rejected": 14, "detail": "EXACT_DUPLICATE=6; E3_UNKNOWN_PATIENT=5; E3_DISCHARGE_BEFORE_ADMIT=3"}, {"source_file": "patients.csv", "rows_read": 113, "rows_accepted": 100, "rows_rejected": 13, "detail": "SUPERSEDED_VERSION=6; EXACT_DUPLICATE=5; P1_BLANK_PATIENT_ID=2"}, {"source_file": "services.csv", "rows_read": 22, "rows_accepted": 20, "rows_rejected": 2, "detail": "EXACT_DUPLICATE=2"}], "reports_uri": "s3://carevista-919315337648-lake/carevista/reports/", "checks": ["All 6 KPI outputs from AWS are byte-for-byte identical to the verified local run", "168 eligible encounters, INR 2,537,703.45 billed (matches README)", "Audit counts match: 113/100/13, 22/20/2, 208/194/14, 572/531/41", "Rows read = accepted + quarantined for every file (silver check passed)", "Landing copies verified by SHA-256 against the staged source files", "No names, emails or phone numbers in any KPI table"], "resources": [["Workflow", "Step Functions: carevista-daily"], ["Compute", "Glue 5.0 jobs: carevista-01-landing ... 04-gold"], ["Storage", "S3: carevista-919315337648-{staging,lake,artifacts}"], ["Query", "Athena workgroup carevista; Glue DBs carevista_gold, carevista_ops"], ["Alerts", "SNS: carevista-pipeline-alerts"], ["IAM user", "carevista-deployer (CLI profile: carevista)"], ["IAM roles", "carevista-glue-role, carevista-sfn-role"]]}};
+const $ = id => document.getElementById(id);
+const n = v => Number(v);
+const inr = v => n(v).toLocaleString("en-IN", {minimumFractionDigits: 2, maximumFractionDigits: 2});
+const int = v => n(v).toLocaleString("en-IN");
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const short = v => v >= 1e5 ? (v/1e5).toFixed(2) + " L" : v >= 1e3 ? (v/1e3).toFixed(1) + " K" : v.toFixed(0);
+
+// theme toggle (wins over the OS setting both ways)
+$("theme").onclick = () => {
+  const dark = document.documentElement.dataset.theme
+    ? document.documentElement.dataset.theme === "dark"
+    : matchMedia("(prefers-color-scheme: dark)").matches;
+  document.documentElement.dataset.theme = dark ? "light" : "dark";
+};
+
+// tooltip
+const tip = $("tip");
+function bindTip(el, html) {
+  el.addEventListener("mousemove", e => { tip.innerHTML = html; tip.style.display = "block";
+    tip.style.left = Math.min(e.clientX + 14, innerWidth - 290) + "px"; tip.style.top = (e.clientY + 14) + "px"; });
+  el.addEventListener("mouseleave", () => tip.style.display = "none");
+}
+
+function table(id, rows, cols) {
+  const head = cols.map(c => `<th class="${c.num ? "num" : ""}">${esc(c.label)}</th>`).join("");
+  const body = rows.map(r => "<tr>" + cols.map(c => {
+    const v = c.fmt ? c.fmt(r[c.key], r) : esc(r[c.key]);
+    return `<td class="${c.num ? "num" : ""}">${v}</td>`; }).join("") + "</tr>").join("");
+  $(id).innerHTML = `<table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table>`;
+}
+
+const R = D.run;
+$("batch").textContent = R.batch_id;
+$("status").innerHTML = (R.status === "SUCCEEDED" ? "&#10003; Pipeline succeeded" : "Pipeline: " + esc(R.status));
+if (R.status !== "SUCCEEDED") { $("status").style.color = "var(--critical)"; }
+$("runname").textContent = "Step Functions execution " + R.execution;
+$("region").textContent = "Account " + R.account + " · " + R.region;
+$("src").textContent = R.reports_uri;
+
+// tiles
+const totalRevenue = D.kpi4.reduce((s, r) => s + n(r.billed_amount), 0);
+const eligible = D.kpi4.reduce((s, r) => s + n(r.eligible_encounters), 0);
+const read = R.audit.reduce((s, r) => s + r.rows_read, 0), acc = R.audit.reduce((s, r) => s + r.rows_accepted, 0);
+const tiles = [
+  ["Billed revenue (INR)", inr(totalRevenue), "eligible encounters only, excluding tax"],
+  ["Eligible encounters", int(eligible), "status Completed or Discharged, before the cutoff"],
+  ["Rows accepted", `${int(acc)} / ${int(read)}`, `${int(read - acc)} quarantined with a reason`],
+  ["AWS run time", R.total_minutes + " min", "4 Glue tasks run in order, 1 retry each"],
+];
+$("tiles").innerHTML = tiles.map(t => `<div class="tile"><div class="label">${t[0]}</div><div class="value">${t[1]}</div><div class="muted">${t[2]}</div></div>`).join("");
+
+// workflow steps
+$("steps").innerHTML = R.steps.map((s, i) => `<div class="step"><div class="muted">Step ${i + 1}</div>
+  <div class="name">${esc(s.name)}</div><div class="ok">&#10003; ${esc(s.status)}</div>
+  <div class="muted">${esc(s.duration)} · Glue job ${esc(s.job)}</div></div>`).join("");
+
+// KPI 1 -> monthly totals (column chart)
+const byMonth = {};
+D.kpi1.forEach(r => byMonth[r.month] = (byMonth[r.month] || 0) + n(r.billed_revenue));
+const months = Object.keys(byMonth).sort(), mMax = Math.max(...Object.values(byMonth));
+const monthName = m => new Date(m + "-01T00:00:00").toLocaleString("en", {month: "short", year: "numeric"});
+const step = Math.pow(10, Math.floor(Math.log10(mMax))), yTop = Math.ceil(mMax / step) * step;
+let gl = ""; for (let g = step; g < yTop; g += step) gl += `<div class="gridline" style="bottom:${g / yTop * 100}%"></div>`;
+$("chart-month").innerHTML = `<div class="cols">${gl}${months.map(m => `<div class="col" data-m="${m}">
+  <div class="top">${short(byMonth[m])}</div><div class="colbar" style="height:${byMonth[m] / yTop * 88}%"></div></div>`).join("")}</div>
+  <div class="xlabels">${months.map(m => `<span>${monthName(m)}</span>`).join("")}</div>`;
+document.querySelectorAll("#chart-month .col").forEach(el => {
+  const m = el.dataset.m;
+  const lines = D.kpi1.filter(r => r.month === m).sort((a, b) => n(b.billed_revenue) - n(a.billed_revenue))
+    .map(r => `${esc(r.department)}: ${inr(r.billed_revenue)}`).join("<br>");
+  bindTip(el, `<b>${monthName(m)}</b> · INR ${inr(byMonth[m])}<br><span style="color:var(--text-secondary)">${lines}</span>`);
+});
+table("tbl-kpi1", D.kpi1, [{key: "month", label: "Month"}, {key: "department", label: "Department"},
+  {key: "billed_revenue", label: "Billed revenue (INR)", num: true, fmt: inr}]);
+
+// KPI 2 -> hospital totals (horizontal bars)
+const names = Object.fromEntries(D.kpi5.map(r => [r.hospital_id, r.hospital_name]));
+const byHosp = {};
+D.kpi2.forEach(r => { const h = byHosp[r.hospital_id] ||= {amt: 0, enc: 0, types: []};
+  h.amt += n(r.billed_amount); h.enc += n(r.eligible_encounters); h.types.push(r); });
+const hosp = Object.entries(byHosp).sort((a, b) => b[1].amt - a[1].amt), hMax = hosp[0][1].amt;
+$("chart-hospital").innerHTML = `<div class="bars">${hosp.map(([id, h]) => `<div class="bar-row" data-h="${id}">
+  <span>${esc(names[id] ? names[id].replace("CareVista ", "") : id)} <span class="muted">${id}</span></span>
+  <div class="bar-track"><div class="bar" style="width:${h.amt / hMax * 100}%"></div></div>
+  <span class="v">${short(h.amt)}</span></div>`).join("")}</div>`;
+document.querySelectorAll("#chart-hospital .bar-row").forEach(el => {
+  const h = byHosp[el.dataset.h];
+  bindTip(el, `<b>${esc(names[el.dataset.h] || el.dataset.h)}</b><br>INR ${inr(h.amt)} · ${h.enc} encounters<br>` +
+    h.types.map(t => `<span style="color:var(--text-secondary)">${esc(t.encounter_type)}: ${t.eligible_encounters} enc, avg ${inr(t.average_bill)}</span>`).join("<br>"));
+});
+table("tbl-kpi2", D.kpi2, [{key: "hospital_id", label: "Hospital"}, {key: "encounter_type", label: "Type"},
+  {key: "eligible_encounters", label: "Encounters", num: true}, {key: "billed_amount", label: "Billed (INR)", num: true, fmt: inr},
+  {key: "average_bill", label: "Average bill", num: true, fmt: inr}]);
+
+table("tbl-audit", R.audit, [{key: "source_file", label: "Source file"}, {key: "rows_read", label: "Read", num: true},
+  {key: "rows_accepted", label: "Accepted", num: true}, {key: "rows_rejected", label: "Quarantined", num: true},
+  {key: "detail", label: "Reject reasons", fmt: v => `<span class="muted">${esc(v).replaceAll("; ", "<br>")}</span>`}]);
+table("tbl-kpi3", D.kpi3, [{key: "rank", label: "#"}, {key: "patient_id", label: "Patient"},
+  {key: "eligible_encounters", label: "Encounters", num: true}, {key: "billed_amount", label: "Billed (INR)", num: true, fmt: inr}]);
+table("tbl-kpi4", D.kpi4, [{key: "patient_category", label: "Category"}, {key: "patients", label: "Patients", num: true},
+  {key: "eligible_encounters", label: "Encounters", num: true}, {key: "billed_amount", label: "Billed (INR)", num: true, fmt: inr},
+  {key: "average_bill", label: "Avg bill", num: true, fmt: inr}]);
+table("tbl-kpi5", D.kpi5, [{key: "hospital_name", label: "Hospital"}, {key: "inpatient_encounters", label: "Inpatient", num: true},
+  {key: "avg_length_of_stay_days", label: "Avg days", num: true}, {key: "max_length_of_stay_days", label: "Max days", num: true}]);
+table("tbl-kpi6", D.kpi6, [{key: "hospital_region", label: "Region"}, {key: "service_category", label: "Service category"},
+  {key: "billed_revenue", label: "Billed revenue (INR)", num: true, fmt: inr},
+  {key: "share_of_region_pct", label: "Share of region", num: true, fmt: v => n(v).toFixed(2) + "%"}]);
+
+$("checks").innerHTML = R.checks.map(c => `<div class="check"><span class="ok">&#10003;</span><span>${esc(c)}</span></div>`).join("");
+$("resources").innerHTML = R.resources.map(r => `<tr><th>${esc(r[0])}</th><td><code>${esc(r[1])}</code></td></tr>`).join("");
+})();
+</script>
+</body>
+</html>

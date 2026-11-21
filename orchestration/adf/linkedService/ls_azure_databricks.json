@@ -1,0 +1,19 @@
+{
+  "name": "ls_azure_databricks",
+  "properties": {
+    "type": "AzureDatabricks",
+    "description": "Job cluster per run. Authenticates to Databricks with the Data Factory managed identity.",
+    "typeProperties": {
+      "domain": "https://<databricks-workspace>.azuredatabricks.net",
+      "authentication": "MSI",
+      "workspaceResourceId": "/subscriptions/<subscription-id>/resourceGroups/<resource-group>/providers/Microsoft.Databricks/workspaces/<databricks-workspace>",
+      "newClusterVersion": "15.4.x-scala2.12",
+      "newClusterNumOfWorker": "1",
+      "newClusterNodeType": "Standard_DS3_v2",
+      "newClusterSparkConf": {
+        "spark.sql.session.timeZone": "Asia/Kolkata"
+      },
+      "newClusterInitScripts": []
+    }
+  }
+}

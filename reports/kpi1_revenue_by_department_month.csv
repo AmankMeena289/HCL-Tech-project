@@ -1,0 +1,37 @@
+month,department,billed_revenue
+2026-01,Consultation,32358.45
+2026-01,Laboratory,27213.40
+2026-01,Pharmacy,14502.90
+2026-01,Procedures,246937.65
+2026-01,Radiology,5886.70
+2026-01,Room & Nursing,291522.90
+2026-02,Consultation,26125.35
+2026-02,Laboratory,17881.30
+2026-02,Pharmacy,9301.90
+2026-02,Procedures,46149.90
+2026-02,Radiology,10809.55
+2026-02,Room & Nursing,170787.50
+2026-03,Consultation,29469.40
+2026-03,Laboratory,20033.95
+2026-03,Pharmacy,17875.55
+2026-03,Procedures,112062.05
+2026-03,Radiology,10094.20
+2026-03,Room & Nursing,305135.50
+2026-04,Consultation,26219.90
+2026-04,Laboratory,27002.15
+2026-04,Pharmacy,24865.85
+2026-04,Procedures,105781.00
+2026-04,Radiology,14172.95
+2026-04,Room & Nursing,392253.30
+2026-05,Consultation,25606.75
+2026-05,Laboratory,19725.70
+2026-05,Pharmacy,23917.20
+2026-05,Procedures,158673.05
+2026-05,Radiology,11171.05
+2026-05,Room & Nursing,199823.65
+2026-06,Consultation,25564.60
+2026-06,Laboratory,10405.70
+2026-06,Pharmacy,7108.15
+2026-06,Procedures,3957.30
+2026-06,Radiology,15972.40
+2026-06,Room & Nursing,51334.60

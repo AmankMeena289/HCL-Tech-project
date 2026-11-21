@@ -1,0 +1,760 @@
+{
+  "meta": {
+    "generated_at": "2026-11-21T10:20:46+00:00",
+    "account": "919315337648",
+    "region": "ap-southeast-2",
+    "batch_id": "B20260630",
+    "cutoff": "2026-06-30 23:59:59",
+    "lake": "s3://carevista-919315337648-lake/carevista",
+    "expected": {
+      "billed_revenue": 2537703.45,
+      "eligible_encounters": 168
+    }
+  },
+  "pipeline": {
+    "execution": {
+      "name": "run-20261121T153055-B20260630",
+      "status": "SUCCEEDED",
+      "started_at": "2026-11-21T15:31:11.266000+05:30",
+      "finished_at": "2026-11-21T15:45:17.637000+05:30",
+      "input": {
+        "batch_id": "B20260630",
+        "fail_once": "none"
+      },
+      "console_url": "https://ap-southeast-2.console.aws.amazon.com/states/home?region=ap-southeast-2#/v2/executions/details/arn:aws:states:ap-southeast-2:919315337648:execution:carevista-daily:run-20261121T153055-B20260630"
+    },
+    "steps": [
+      {
+        "state": "01_Landing",
+        "task": "landing",
+        "status": "SUCCEEDED",
+        "attempts": 1,
+        "started_at": "2026-11-21T15:31:11.380000+05:30",
+        "finished_at": "2026-11-21T15:34:14.871000+05:30",
+        "duration_s": 183,
+        "glue_seconds": 108,
+        "glue_job_run_id": "jr_4e35b98d2f07f13f2117f3a82c5f217ae2d91a63baf26e231bc439f251d82cb7",
+        "error": null
+      },
+      {
+        "state": "02_Bronze",
+        "task": "bronze",
+        "status": "SUCCEEDED",
+        "attempts": 1,
+        "started_at": "2026-11-21T15:34:14.871000+05:30",
+        "finished_at": "2026-11-21T15:37:12.361000+05:30",
+        "duration_s": 177,
+        "glue_seconds": 121,
+        "glue_job_run_id": "jr_23979da6941e7827c201ad2f8df01565e9aee76e281f4b71edce20b4a5d574a7",
+        "error": null
+      },
+      {
+        "state": "03_Silver",
+        "task": "silver",
+        "status": "SUCCEEDED",
+        "attempts": 1,
+        "started_at": "2026-11-21T15:37:12.361000+05:30",
+        "finished_at": "2026-11-21T15:41:19.023000+05:30",
+        "duration_s": 247,
+        "glue_seconds": 180,
+        "glue_job_run_id": "jr_3f4e2d86c69e85170d9deb6eb858a1ab2238bba051c0a887cabaa74b63bae968",
+        "error": null
+      },
+      {
+        "state": "04_Gold",
+        "task": "gold",
+        "status": "SUCCEEDED",
+        "attempts": 1,
+        "started_at": "2026-11-21T15:41:19.023000+05:30",
+        "finished_at": "2026-11-21T15:45:17.610000+05:30",
+        "duration_s": 239,
+        "glue_seconds": 186,
+        "glue_job_run_id": "jr_1f118f8545c292248c7555a56d640c78f8af27c57849f24474173ad6a1b31e6d",
+        "error": null
+      }
+    ]
+  },
+  "run_history": [
+    {
+      "task": "landing",
+      "attempt": "1",
+      "status": "Succeeded",
+      "started_at": "2026-11-21 10:02:10.037 UTC",
+      "finished_at": "2026-11-21 10:03:02.707 UTC",
+      "message": null
+    },
+    {
+      "task": "bronze",
+      "attempt": "1",
+      "status": "Succeeded",
+      "started_at": "2026-11-21 10:05:24.416 UTC",
+      "finished_at": "2026-11-21 10:06:09.328 UTC",
+      "message": null
+    },
+    {
+      "task": "silver",
+      "attempt": "1",
+      "status": "Succeeded",
+      "started_at": "2026-11-21 10:08:25.260 UTC",
+      "finished_at": "2026-11-21 10:10:06.395 UTC",
+      "message": null
+    },
+    {
+      "task": "gold",
+      "attempt": "1",
+      "status": "Succeeded",
+      "started_at": "2026-11-21 10:12:31.238 UTC",
+      "finished_at": "2026-11-21 10:14:08.511 UTC",
+      "message": null
+    }
+  ],
+  "audit": [
+    {
+      "source_file": "encounter_services.csv",
+      "rows_read": 572,
+      "rows_accepted": 531,
+      "rows_rejected": 41
+    },
+    {
+      "source_file": "encounters.csv",
+      "rows_read": 208,
+      "rows_accepted": 194,
+      "rows_rejected": 14
+    },
+    {
+      "source_file": "patients.csv",
+      "rows_read": 113,
+      "rows_accepted": 100,
+      "rows_rejected": 13
+    },
+    {
+      "source_file": "services.csv",
+      "rows_read": 22,
+      "rows_accepted": 20,
+      "rows_rejected": 2
+    }
+  ],
+  "warnings": [],
+  "kpis": {
+    "kpi1_revenue_by_department_month": [
+      {
+        "month": "2026-01",
+        "department": "Consultation",
+        "billed_revenue": "32358.45"
+      },
+      {
+        "month": "2026-01",
+        "department": "Laboratory",
+        "billed_revenue": "27213.40"
+      },
+      {
+        "month": "2026-01",
+        "department": "Pharmacy",
+        "billed_revenue": "14502.90"
+      },
+      {
+        "month": "2026-01",
+        "department": "Procedures",
+        "billed_revenue": "246937.65"
+      },
+      {
+        "month": "2026-01",
+        "department": "Radiology",
+        "billed_revenue": "5886.70"
+      },
+      {
+        "month": "2026-01",
+        "department": "Room & Nursing",
+        "billed_revenue": "291522.90"
+      },
+      {
+        "month": "2026-02",
+        "department": "Consultation",
+        "billed_revenue": "26125.35"
+      },
+      {
+        "month": "2026-02",
+        "department": "Laboratory",
+        "billed_revenue": "17881.30"
+      },
+      {
+        "month": "2026-02",
+        "department": "Pharmacy",
+        "billed_revenue": "9301.90"
+      },
+      {
+        "month": "2026-02",
+        "department": "Procedures",
+        "billed_revenue": "46149.90"
+      },
+      {
+        "month": "2026-02",
+        "department": "Radiology",
+        "billed_revenue": "10809.55"
+      },
+      {
+        "month": "2026-02",
+        "department": "Room & Nursing",
+        "billed_revenue": "170787.50"
+      },
+      {
+        "month": "2026-03",
+        "department": "Consultation",
+        "billed_revenue": "29469.40"
+      },
+      {
+        "month": "2026-03",
+        "department": "Laboratory",
+        "billed_revenue": "20033.95"
+      },
+      {
+        "month": "2026-03",
+        "department": "Pharmacy",
+        "billed_revenue": "17875.55"
+      },
+      {
+        "month": "2026-03",
+        "department": "Procedures",
+        "billed_revenue": "112062.05"
+      },
+      {
+        "month": "2026-03",
+        "department": "Radiology",
+        "billed_revenue": "10094.20"
+      },
+      {
+        "month": "2026-03",
+        "department": "Room & Nursing",
+        "billed_revenue": "305135.50"
+      },
+      {
+        "month": "2026-04",
+        "department": "Consultation",
+        "billed_revenue": "26219.90"
+      },
+      {
+        "month": "2026-04",
+        "department": "Laboratory",
+        "billed_revenue": "27002.15"
+      },
+      {
+        "month": "2026-04",
+        "department": "Pharmacy",
+        "billed_revenue": "24865.85"
+      },
+      {
+        "month": "2026-04",
+        "department": "Procedures",
+        "billed_revenue": "105781.00"
+      },
+      {
+        "month": "2026-04",
+        "department": "Radiology",
+        "billed_revenue": "14172.95"
+      },
+      {
+        "month": "2026-04",
+        "department": "Room & Nursing",
+        "billed_revenue": "392253.30"
+      },
+      {
+        "month": "2026-05",
+        "department": "Consultation",
+        "billed_revenue": "25606.75"
+      },
+      {
+        "month": "2026-05",
+        "department": "Laboratory",
+        "billed_revenue": "19725.70"
+      },
+      {
+        "month": "2026-05",
+        "department": "Pharmacy",
+        "billed_revenue": "23917.20"
+      },
+      {
+        "month": "2026-05",
+        "department": "Procedures",
+        "billed_revenue": "158673.05"
+      },
+      {
+        "month": "2026-05",
+        "department": "Radiology",
+        "billed_revenue": "11171.05"
+      },
+      {
+        "month": "2026-05",
+        "department": "Room & Nursing",
+        "billed_revenue": "199823.65"
+      },
+      {
+        "month": "2026-06",
+        "department": "Consultation",
+        "billed_revenue": "25564.60"
+      },
+      {
+        "month": "2026-06",
+        "department": "Laboratory",
+        "billed_revenue": "10405.70"
+      },
+      {
+        "month": "2026-06",
+        "department": "Pharmacy",
+        "billed_revenue": "7108.15"
+      },
+      {
+        "month": "2026-06",
+        "department": "Procedures",
+        "billed_revenue": "3957.30"
+      },
+      {
+        "month": "2026-06",
+        "department": "Radiology",
+        "billed_revenue": "15972.40"
+      },
+      {
+        "month": "2026-06",
+        "department": "Room & Nursing",
+        "billed_revenue": "51334.60"
+      }
+    ],
+    "kpi2_hospital_encounter_type": [
+      {
+        "hospital_id": "H01",
+        "encounter_type": "Emergency",
+        "eligible_encounters": "4",
+        "billed_amount": "11463.20",
+        "average_bill": "2865.80"
+      },
+      {
+        "hospital_id": "H01",
+        "encounter_type": "Inpatient",
+        "eligible_encounters": "14",
+        "billed_amount": "709115.90",
+        "average_bill": "50651.14"
+      },
+      {
+        "hospital_id": "H01",
+        "encounter_type": "Outpatient",
+        "eligible_encounters": "9",
+        "billed_amount": "17277.25",
+        "average_bill": "1919.69"
+      },
+      {
+        "hospital_id": "H02",
+        "encounter_type": "Emergency",
+        "eligible_encounters": "7",
+        "billed_amount": "18171.05",
+        "average_bill": "2595.86"
+      },
+      {
+        "hospital_id": "H02",
+        "encounter_type": "Inpatient",
+        "eligible_encounters": "11",
+        "billed_amount": "473833.95",
+        "average_bill": "43075.81"
+      },
+      {
+        "hospital_id": "H02",
+        "encounter_type": "Outpatient",
+        "eligible_encounters": "22",
+        "billed_amount": "53301.35",
+        "average_bill": "2422.79"
+      },
+      {
+        "hospital_id": "H03",
+        "encounter_type": "Emergency",
+        "eligible_encounters": "8",
+        "billed_amount": "15650.40",
+        "average_bill": "1956.30"
+      },
+      {
+        "hospital_id": "H03",
+        "encounter_type": "Inpatient",
+        "eligible_encounters": "9",
+        "billed_amount": "338068.70",
+        "average_bill": "37563.19"
+      },
+      {
+        "hospital_id": "H03",
+        "encounter_type": "Outpatient",
+        "eligible_encounters": "12",
+        "billed_amount": "19936.95",
+        "average_bill": "1661.41"
+      },
+      {
+        "hospital_id": "H04",
+        "encounter_type": "Emergency",
+        "eligible_encounters": "7",
+        "billed_amount": "19744.25",
+        "average_bill": "2820.61"
+      },
+      {
+        "hospital_id": "H04",
+        "encounter_type": "Inpatient",
+        "eligible_encounters": "6",
+        "billed_amount": "239505.45",
+        "average_bill": "39917.58"
+      },
+      {
+        "hospital_id": "H04",
+        "encounter_type": "Outpatient",
+        "eligible_encounters": "6",
+        "billed_amount": "13859.15",
+        "average_bill": "2309.86"
+      },
+      {
+        "hospital_id": "H05",
+        "encounter_type": "Emergency",
+        "eligible_encounters": "6",
+        "billed_amount": "16137.70",
+        "average_bill": "2689.62"
+      },
+      {
+        "hospital_id": "H05",
+        "encounter_type": "Inpatient",
+        "eligible_encounters": "9",
+        "billed_amount": "281910.80",
+        "average_bill": "31323.42"
+      },
+      {
+        "hospital_id": "H05",
+        "encounter_type": "Outpatient",
+        "eligible_encounters": "9",
+        "billed_amount": "26904.20",
+        "average_bill": "2989.36"
+      },
+      {
+        "hospital_id": "H06",
+        "encounter_type": "Emergency",
+        "eligible_encounters": "3",
+        "billed_amount": "5527.10",
+        "average_bill": "1842.37"
+      },
+      {
+        "hospital_id": "H06",
+        "encounter_type": "Inpatient",
+        "eligible_encounters": "8",
+        "billed_amount": "238122.10",
+        "average_bill": "29765.26"
+      },
+      {
+        "hospital_id": "H06",
+        "encounter_type": "Outpatient",
+        "eligible_encounters": "18",
+        "billed_amount": "39173.95",
+        "average_bill": "2176.33"
+      }
+    ],
+    "kpi3_top10_patients": [
+      {
+        "rank": "1",
+        "patient_id": "PT087",
+        "eligible_encounters": "4",
+        "billed_amount": "185207.50"
+      },
+      {
+        "rank": "2",
+        "patient_id": "PT091",
+        "eligible_encounters": "5",
+        "billed_amount": "164918.75"
+      },
+      {
+        "rank": "3",
+        "patient_id": "PT088",
+        "eligible_encounters": "6",
+        "billed_amount": "132141.40"
+      },
+      {
+        "rank": "4",
+        "patient_id": "PT018",
+        "eligible_encounters": "5",
+        "billed_amount": "115978.00"
+      },
+      {
+        "rank": "5",
+        "patient_id": "PT007",
+        "eligible_encounters": "5",
+        "billed_amount": "109230.30"
+      },
+      {
+        "rank": "6",
+        "patient_id": "PT095",
+        "eligible_encounters": "7",
+        "billed_amount": "108977.25"
+      },
+      {
+        "rank": "7",
+        "patient_id": "PT092",
+        "eligible_encounters": "2",
+        "billed_amount": "96121.15"
+      },
+      {
+        "rank": "8",
+        "patient_id": "PT030",
+        "eligible_encounters": "3",
+        "billed_amount": "84567.05"
+      },
+      {
+        "rank": "9",
+        "patient_id": "PT024",
+        "eligible_encounters": "7",
+        "billed_amount": "82169.45"
+      },
+      {
+        "rank": "10",
+        "patient_id": "PT056",
+        "eligible_encounters": "1",
+        "billed_amount": "82005.35"
+      }
+    ],
+    "kpi4_patient_category_profile": [
+      {
+        "patient_category": "SelfPay",
+        "patients": "35",
+        "patients_with_eligible_encounters": "23",
+        "eligible_encounters": "46",
+        "billed_amount": "735921.85",
+        "average_bill": "15998.30"
+      },
+      {
+        "patient_category": "Insured",
+        "patients": "44",
+        "patients_with_eligible_encounters": "31",
+        "eligible_encounters": "87",
+        "billed_amount": "1327835.80",
+        "average_bill": "15262.48"
+      },
+      {
+        "patient_category": "Corporate",
+        "patients": "21",
+        "patients_with_eligible_encounters": "12",
+        "eligible_encounters": "35",
+        "billed_amount": "473945.80",
+        "average_bill": "13541.31"
+      }
+    ],
+    "kpi5_inpatient_length_of_stay": [
+      {
+        "hospital_id": "H01",
+        "hospital_name": "CareVista Delhi Central",
+        "inpatient_encounters": "14",
+        "avg_length_of_stay_days": "5.04",
+        "max_length_of_stay_days": "8.21"
+      },
+      {
+        "hospital_id": "H02",
+        "hospital_name": "CareVista Chandigarh",
+        "inpatient_encounters": "11",
+        "avg_length_of_stay_days": "4.61",
+        "max_length_of_stay_days": "8.03"
+      },
+      {
+        "hospital_id": "H03",
+        "hospital_name": "CareVista Bengaluru",
+        "inpatient_encounters": "9",
+        "avg_length_of_stay_days": "4.21",
+        "max_length_of_stay_days": "8.04"
+      },
+      {
+        "hospital_id": "H04",
+        "hospital_name": "CareVista Chennai",
+        "inpatient_encounters": "6",
+        "avg_length_of_stay_days": "4.70",
+        "max_length_of_stay_days": "7.90"
+      },
+      {
+        "hospital_id": "H05",
+        "hospital_name": "CareVista Mumbai",
+        "inpatient_encounters": "9",
+        "avg_length_of_stay_days": "5.11",
+        "max_length_of_stay_days": "8.24"
+      },
+      {
+        "hospital_id": "H06",
+        "hospital_name": "CareVista Pune",
+        "inpatient_encounters": "8",
+        "avg_length_of_stay_days": "4.50",
+        "max_length_of_stay_days": "7.96"
+      }
+    ],
+    "kpi6_region_service_category_mix": [
+      {
+        "hospital_region": "North",
+        "service_category": "Accommodation",
+        "billed_revenue": "695780.65",
+        "share_of_region_pct": "54.22"
+      },
+      {
+        "hospital_region": "North",
+        "service_category": "Procedure",
+        "billed_revenue": "401628.65",
+        "share_of_region_pct": "31.30"
+      },
+      {
+        "hospital_region": "North",
+        "service_category": "Diagnostic",
+        "billed_revenue": "77888.95",
+        "share_of_region_pct": "6.07"
+      },
+      {
+        "hospital_region": "North",
+        "service_category": "Consultation",
+        "billed_revenue": "66462.20",
+        "share_of_region_pct": "5.18"
+      },
+      {
+        "hospital_region": "North",
+        "service_category": "Medication",
+        "billed_revenue": "41402.25",
+        "share_of_region_pct": "3.23"
+      },
+      {
+        "hospital_region": "South",
+        "service_category": "Accommodation",
+        "billed_revenue": "377557.20",
+        "share_of_region_pct": "58.38"
+      },
+      {
+        "hospital_region": "South",
+        "service_category": "Procedure",
+        "billed_revenue": "153040.25",
+        "share_of_region_pct": "23.66"
+      },
+      {
+        "hospital_region": "South",
+        "service_category": "Diagnostic",
+        "billed_revenue": "48111.50",
+        "share_of_region_pct": "7.44"
+      },
+      {
+        "hospital_region": "South",
+        "service_category": "Consultation",
+        "billed_revenue": "45390.10",
+        "share_of_region_pct": "7.02"
+      },
+      {
+        "hospital_region": "South",
+        "service_category": "Medication",
+        "billed_revenue": "22665.85",
+        "share_of_region_pct": "3.50"
+      },
+      {
+        "hospital_region": "West",
+        "service_category": "Accommodation",
+        "billed_revenue": "337519.60",
+        "share_of_region_pct": "55.53"
+      },
+      {
+        "hospital_region": "West",
+        "service_category": "Procedure",
+        "billed_revenue": "118892.05",
+        "share_of_region_pct": "19.56"
+      },
+      {
+        "hospital_region": "West",
+        "service_category": "Diagnostic",
+        "billed_revenue": "64368.60",
+        "share_of_region_pct": "10.59"
+      },
+      {
+        "hospital_region": "West",
+        "service_category": "Consultation",
+        "billed_revenue": "53492.15",
+        "share_of_region_pct": "8.80"
+      },
+      {
+        "hospital_region": "West",
+        "service_category": "Medication",
+        "billed_revenue": "33503.45",
+        "share_of_region_pct": "5.51"
+      }
+    ]
+  },
+  "resources": [
+    {
+      "service": "Amazon S3",
+      "name": "carevista-919315337648-staging",
+      "purpose": "Staging area: the four source CSVs, unchanged",
+      "status": "Active"
+    },
+    {
+      "service": "Amazon S3",
+      "name": "carevista-919315337648-lake",
+      "purpose": "Data lake: landing, bronze, silver, gold, quarantine and audit (Delta Lake)",
+      "status": "Active"
+    },
+    {
+      "service": "Amazon S3",
+      "name": "carevista-919315337648-artifacts",
+      "purpose": "Pipeline code, Glue temp files and Athena results",
+      "status": "Active"
+    },
+    {
+      "service": "AWS Glue",
+      "name": "carevista-01-landing",
+      "purpose": "PySpark job for the landing step",
+      "status": "Active"
+    },
+    {
+      "service": "AWS Glue",
+      "name": "carevista-02-bronze",
+      "purpose": "PySpark job for the bronze step",
+      "status": "Active"
+    },
+    {
+      "service": "AWS Glue",
+      "name": "carevista-03-silver",
+      "purpose": "PySpark job for the silver step",
+      "status": "Active"
+    },
+    {
+      "service": "AWS Glue",
+      "name": "carevista-04-gold",
+      "purpose": "PySpark job for the gold step",
+      "status": "Active"
+    },
+    {
+      "service": "AWS Step Functions",
+      "name": "carevista-daily",
+      "purpose": "Runs the four Glue jobs in order, one retry each, alert on failure",
+      "status": "Active"
+    },
+    {
+      "service": "Amazon SNS",
+      "name": "carevista-pipeline-alerts",
+      "purpose": "Failure alert topic",
+      "status": "Active"
+    },
+    {
+      "service": "Amazon Athena",
+      "name": "carevista",
+      "purpose": "Workgroup for SQL on the gold and audit tables",
+      "status": "Active"
+    },
+    {
+      "service": "AWS Glue Data Catalog",
+      "name": "carevista_gold",
+      "purpose": "Star schema and KPI tables",
+      "status": "Active"
+    },
+    {
+      "service": "AWS Glue Data Catalog",
+      "name": "carevista_ops",
+      "purpose": "Audit and run history tables",
+      "status": "Active"
+    },
+    {
+      "service": "AWS IAM",
+      "name": "carevista-glue-role",
+      "purpose": "Role the Glue jobs run as (only the CareVista buckets)",
+      "status": "Active"
+    },
+    {
+      "service": "AWS IAM",
+      "name": "carevista-sfn-role",
+      "purpose": "Role the workflow runs as (start Glue jobs, publish alert)",
+      "status": "Active"
+    }
+  ]
+}

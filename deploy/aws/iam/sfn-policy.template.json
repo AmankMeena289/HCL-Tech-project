@@ -1,0 +1,17 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "RunCareVistaGlueJobs",
+      "Effect": "Allow",
+      "Action": ["glue:StartJobRun", "glue:GetJobRun", "glue:GetJobRuns", "glue:BatchStopJobRun"],
+      "Resource": "arn:aws:glue:__REGION__:__ACCOUNT__:job/__PREFIX__-*"
+    },
+    {
+      "Sid": "FailureAlert",
+      "Effect": "Allow",
+      "Action": "sns:Publish",
+      "Resource": "__TOPIC_ARN__"
+    }
+  ]
+}

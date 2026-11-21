@@ -1,0 +1,411 @@
+{
+    "events": [
+        {
+            "timestamp": "2026-11-21T15:31:11.266000+05:30",
+            "type": "ExecutionStarted",
+            "id": 1,
+            "previousEventId": 0,
+            "executionStartedEventDetails": {
+                "input": "{\"batch_id\":\"B20260630\",\"fail_once\":\"none\"}",
+                "inputDetails": {
+                    "truncated": false
+                },
+                "roleArn": "arn:aws:iam::919315337648:role/carevista-sfn-role"
+            }
+        },
+        {
+            "timestamp": "2026-11-21T15:31:11.380000+05:30",
+            "type": "PassStateEntered",
+            "id": 2,
+            "previousEventId": 0,
+            "stateEnteredEventDetails": {
+                "name": "ApplyDefaults",
+                "input": "{\"batch_id\":\"B20260630\",\"fail_once\":\"none\"}",
+                "inputDetails": {
+                    "truncated": false
+                }
+            }
+        },
+        {
+            "timestamp": "2026-11-21T15:31:11.380000+05:30",
+            "type": "PassStateExited",
+            "id": 3,
+            "previousEventId": 2,
+            "stateExitedEventDetails": {
+                "name": "ApplyDefaults",
+                "output": "{\"defaults\":{\"batch_id\":\"B20260630\",\"input_path\":\"s3://carevista-919315337648-staging/carevista/2026-06-30\",\"lake_root\":\"s3://carevista-919315337648-lake/carevista\",\"fail_once\":\"none\"},\"input\":{\"batch_id\":\"B20260630\",\"fail_once\":\"none\"}}",
+                "outputDetails": {
+                    "truncated": false
+                }
+            }
+        },
+        {
+            "timestamp": "2026-11-21T15:31:11.380000+05:30",
+            "type": "PassStateEntered",
+            "id": 4,
+            "previousEventId": 3,
+            "stateEnteredEventDetails": {
+                "name": "MergeInput",
+                "input": "{\"defaults\":{\"batch_id\":\"B20260630\",\"input_path\":\"s3://carevista-919315337648-staging/carevista/2026-06-30\",\"lake_root\":\"s3://carevista-919315337648-lake/carevista\",\"fail_once\":\"none\"},\"input\":{\"batch_id\":\"B20260630\",\"fail_once\":\"none\"}}",
+                "inputDetails": {
+                    "truncated": false
+                }
+            }
+        },
+        {
+            "timestamp": "2026-11-21T15:31:11.380000+05:30",
+            "type": "PassStateExited",
+            "id": 5,
+            "previousEventId": 4,
+            "stateExitedEventDetails": {
+                "name": "MergeInput",
+                "output": "{\"args\":{\"fail_once\":\"none\",\"batch_id\":\"B20260630\",\"lake_root\":\"s3://carevista-919315337648-lake/carevista\",\"input_path\":\"s3://carevista-919315337648-staging/carevista/2026-06-30\"}}",
+                "outputDetails": {
+                    "truncated": false
+                }
+            }
+        },
+        {
+            "timestamp": "2026-11-21T15:31:11.380000+05:30",
+            "type": "TaskStateEntered",
+            "id": 6,
+            "previousEventId": 5,
+            "stateEnteredEventDetails": {
+                "name": "01_Landing",
+                "input": "{\"args\":{\"fail_once\":\"none\",\"batch_id\":\"B20260630\",\"lake_root\":\"s3://carevista-919315337648-lake/carevista\",\"input_path\":\"s3://carevista-919315337648-staging/carevista/2026-06-30\"}}",
+                "inputDetails": {
+                    "truncated": false
+                }
+            }
+        },
+        {
+            "timestamp": "2026-11-21T15:31:11.380000+05:30",
+            "type": "TaskScheduled",
+            "id": 7,
+            "previousEventId": 6,
+            "taskScheduledEventDetails": {
+                "resourceType": "glue",
+                "resource": "startJobRun.sync",
+                "region": "ap-southeast-2",
+                "parameters": "{\"JobName\":\"carevista-01-landing\",\"Arguments\":{\"--lake_root\":\"s3://carevista-919315337648-lake/carevista\",\"--batch_id\":\"B20260630\",\"--run_id\":\"run-20261121T153055-B20260630\",\"--input_path\":\"s3://carevista-919315337648-staging/carevista/2026-06-30\",\"--fail_once\":\"none\"}}"
+            }
+        },
+        {
+            "timestamp": "2026-11-21T15:31:11.428000+05:30",
+            "type": "TaskStarted",
+            "id": 8,
+            "previousEventId": 7,
+            "taskStartedEventDetails": {
+                "resourceType": "glue",
+                "resource": "startJobRun.sync"
+            }
+        },
+        {
+            "timestamp": "2026-11-21T15:31:11.569000+05:30",
+            "type": "TaskSubmitted",
+            "id": 9,
+            "previousEventId": 8,
+            "taskSubmittedEventDetails": {
+                "resourceType": "glue",
+                "resource": "startJobRun.sync",
+                "output": "{\"JobRunId\":\"jr_4e35b98d2f07f13f2117f3a82c5f217ae2d91a63baf26e231bc439f251d82cb7\",\"SdkHttpMetadata\":{\"AllHttpHeaders\":{\"Cache-Control\":[\"no-cache\"],\"Connection\":[\"keep-alive\"],\"x-amzn-RequestId\":[\"c2c17667-c85a-4e2e-b27b-0528a88d7ca2\"],\"Content-Length\":[\"82\"],\"Date\":[\"Sat, 21 Nov 2026 10:01:11 GMT\"],\"Content-Type\":[\"application/x-amz-json-1.1\"]},\"HttpHeaders\":{\"Cache-Control\":\"no-cache\",\"Connection\":\"keep-alive\",\"Content-Length\":\"82\",\"Content-Type\":\"application/x-amz-json-1.1\",\"Date\":\"Sat, 21 Nov 2026 10:01:11 GMT\",\"x-amzn-RequestId\":\"c2c17667-c85a-4e2e-b27b-0528a88d7ca2\"},\"HttpStatusCode\":200},\"SdkResponseMetadata\":{\"RequestId\":\"c2c17667-c85a-4e2e-b27b-0528a88d7ca2\"},\"JobName\":\"carevista-01-landing\"}",
+                "outputDetails": {
+                    "truncated": false
+                }
+            }
+        },
+        {
+            "timestamp": "2026-11-21T15:34:14.858000+05:30",
+            "type": "TaskSucceeded",
+            "id": 10,
+            "previousEventId": 9,
+            "taskSucceededEventDetails": {
+                "resourceType": "glue",
+                "resource": "startJobRun.sync",
+                "output": "{\"AllocatedCapacity\":2,\"Arguments\":{\"--lake_root\":\"s3://carevista-919315337648-lake/carevista\",\"--batch_id\":\"B20260630\",\"--run_id\":\"run-20261121T153055-B20260630\",\"--input_path\":\"s3://carevista-919315337648-staging/carevista/2026-06-30\",\"--fail_once\":\"none\"},\"Attempt\":0,\"CompletedOn\":1795255398328,\"DPUSeconds\":216.0,\"ExecutionTime\":108,\"GlueVersion\":\"5.0\",\"Id\":\"jr_4e35b98d2f07f13f2117f3a82c5f217ae2d91a63baf26e231bc439f251d82cb7\",\"JobMode\":\"SCRIPT\",\"JobName\":\"carevista-01-landing\",\"JobRunState\":\"SUCCEEDED\",\"LastModifiedOn\":1795255398328,\"LogGroupName\":\"/aws-glue/jobs\",\"MaxCapacity\":2.0,\"NumberOfWorkers\":2,\"PredecessorRuns\":[],\"StartedOn\":1795255271529,\"Timeout\":60,\"WorkerType\":\"G.1X\"}",
+                "outputDetails": {
+                    "truncated": false
+                }
+            }
+        },
+        {
+            "timestamp": "2026-11-21T15:34:14.871000+05:30",
+            "type": "TaskStateExited",
+            "id": 11,
+            "previousEventId": 10,
+            "stateExitedEventDetails": {
+                "name": "01_Landing",
+                "output": "{\"args\":{\"fail_once\":\"none\",\"batch_id\":\"B20260630\",\"lake_root\":\"s3://carevista-919315337648-lake/carevista\",\"input_path\":\"s3://carevista-919315337648-staging/carevista/2026-06-30\"},\"results\":{\"landing\":{\"ExecutionTime\":108,\"JobRunId\":\"jr_4e35b98d2f07f13f2117f3a82c5f217ae2d91a63baf26e231bc439f251d82cb7\",\"JobRunState\":\"SUCCEEDED\"}}}",
+                "outputDetails": {
+                    "truncated": false
+                }
+            }
+        },
+        {
+            "timestamp": "2026-11-21T15:34:14.871000+05:30",
+            "type": "TaskStateEntered",
+            "id": 12,
+            "previousEventId": 11,
+            "stateEnteredEventDetails": {
+                "name": "02_Bronze",
+                "input": "{\"args\":{\"fail_once\":\"none\",\"batch_id\":\"B20260630\",\"lake_root\":\"s3://carevista-919315337648-lake/carevista\",\"input_path\":\"s3://carevista-919315337648-staging/carevista/2026-06-30\"},\"results\":{\"landing\":{\"ExecutionTime\":108,\"JobRunId\":\"jr_4e35b98d2f07f13f2117f3a82c5f217ae2d91a63baf26e231bc439f251d82cb7\",\"JobRunState\":\"SUCCEEDED\"}}}",
+                "inputDetails": {
+                    "truncated": false
+                }
+            }
+        },
+        {
+            "timestamp": "2026-11-21T15:34:14.871000+05:30",
+            "type": "TaskScheduled",
+            "id": 13,
+            "previousEventId": 12,
+            "taskScheduledEventDetails": {
+                "resourceType": "glue",
+                "resource": "startJobRun.sync",
+                "region": "ap-southeast-2",
+                "parameters": "{\"JobName\":\"carevista-02-bronze\",\"Arguments\":{\"--lake_root\":\"s3://carevista-919315337648-lake/carevista\",\"--batch_id\":\"B20260630\",\"--run_id\":\"run-20261121T153055-B20260630\",\"--input_path\":\"s3://carevista-919315337648-staging/carevista/2026-06-30\",\"--fail_once\":\"none\"}}"
+            }
+        },
+        {
+            "timestamp": "2026-11-21T15:34:14.939000+05:30",
+            "type": "TaskStarted",
+            "id": 14,
+            "previousEventId": 13,
+            "taskStartedEventDetails": {
+                "resourceType": "glue",
+                "resource": "startJobRun.sync"
+            }
+        },
+        {
+            "timestamp": "2026-11-21T15:34:15.091000+05:30",
+            "type": "TaskSubmitted",
+            "id": 15,
+            "previousEventId": 14,
+            "taskSubmittedEventDetails": {
+                "resourceType": "glue",
+                "resource": "startJobRun.sync",
+                "output": "{\"JobRunId\":\"jr_23979da6941e7827c201ad2f8df01565e9aee76e281f4b71edce20b4a5d574a7\",\"SdkHttpMetadata\":{\"AllHttpHeaders\":{\"Cache-Control\":[\"no-cache\"],\"Connection\":[\"keep-alive\"],\"x-amzn-RequestId\":[\"18614619-e420-4b56-95a5-c077f694a1d2\"],\"Content-Length\":[\"82\"],\"Date\":[\"Sat, 21 Nov 2026 10:04:15 GMT\"],\"Content-Type\":[\"application/x-amz-json-1.1\"]},\"HttpHeaders\":{\"Cache-Control\":\"no-cache\",\"Connection\":\"keep-alive\",\"Content-Length\":\"82\",\"Content-Type\":\"application/x-amz-json-1.1\",\"Date\":\"Sat, 21 Nov 2026 10:04:15 GMT\",\"x-amzn-RequestId\":\"18614619-e420-4b56-95a5-c077f694a1d2\"},\"HttpStatusCode\":200},\"SdkResponseMetadata\":{\"RequestId\":\"18614619-e420-4b56-95a5-c077f694a1d2\"},\"JobName\":\"carevista-02-bronze\"}",
+                "outputDetails": {
+                    "truncated": false
+                }
+            }
+        },
+        {
+            "timestamp": "2026-11-21T15:37:12.349000+05:30",
+            "type": "TaskSucceeded",
+            "id": 16,
+            "previousEventId": 15,
+            "taskSucceededEventDetails": {
+                "resourceType": "glue",
+                "resource": "startJobRun.sync",
+                "output": "{\"AllocatedCapacity\":2,\"Arguments\":{\"--lake_root\":\"s3://carevista-919315337648-lake/carevista\",\"--batch_id\":\"B20260630\",\"--run_id\":\"run-20261121T153055-B20260630\",\"--input_path\":\"s3://carevista-919315337648-staging/carevista/2026-06-30\",\"--fail_once\":\"none\"},\"Attempt\":0,\"CompletedOn\":1795255583669,\"DPUSeconds\":243.0,\"ExecutionTime\":121,\"GlueVersion\":\"5.0\",\"Id\":\"jr_23979da6941e7827c201ad2f8df01565e9aee76e281f4b71edce20b4a5d574a7\",\"JobMode\":\"SCRIPT\",\"JobName\":\"carevista-02-bronze\",\"JobRunState\":\"SUCCEEDED\",\"LastModifiedOn\":1795255583669,\"LogGroupName\":\"/aws-glue/jobs\",\"MaxCapacity\":2.0,\"NumberOfWorkers\":2,\"PredecessorRuns\":[],\"StartedOn\":1795255455050,\"Timeout\":60,\"WorkerType\":\"G.1X\"}",
+                "outputDetails": {
+                    "truncated": false
+                }
+            }
+        },
+        {
+            "timestamp": "2026-11-21T15:37:12.361000+05:30",
+            "type": "TaskStateExited",
+            "id": 17,
+            "previousEventId": 16,
+            "stateExitedEventDetails": {
+                "name": "02_Bronze",
+                "output": "{\"args\":{\"fail_once\":\"none\",\"batch_id\":\"B20260630\",\"lake_root\":\"s3://carevista-919315337648-lake/carevista\",\"input_path\":\"s3://carevista-919315337648-staging/carevista/2026-06-30\"},\"results\":{\"landing\":{\"ExecutionTime\":108,\"JobRunId\":\"jr_4e35b98d2f07f13f2117f3a82c5f217ae2d91a63baf26e231bc439f251d82cb7\",\"JobRunState\":\"SUCCEEDED\"},\"bronze\":{\"ExecutionTime\":121,\"JobRunId\":\"jr_23979da6941e7827c201ad2f8df01565e9aee76e281f4b71edce20b4a5d574a7\",\"JobRunState\":\"SUCCEEDED\"}}}",
+                "outputDetails": {
+                    "truncated": false
+                }
+            }
+        },
+        {
+            "timestamp": "2026-11-21T15:37:12.361000+05:30",
+            "type": "TaskStateEntered",
+            "id": 18,
+            "previousEventId": 17,
+            "stateEnteredEventDetails": {
+                "name": "03_Silver",
+                "input": "{\"args\":{\"fail_once\":\"none\",\"batch_id\":\"B20260630\",\"lake_root\":\"s3://carevista-919315337648-lake/carevista\",\"input_path\":\"s3://carevista-919315337648-staging/carevista/2026-06-30\"},\"results\":{\"landing\":{\"ExecutionTime\":108,\"JobRunId\":\"jr_4e35b98d2f07f13f2117f3a82c5f217ae2d91a63baf26e231bc439f251d82cb7\",\"JobRunState\":\"SUCCEEDED\"},\"bronze\":{\"ExecutionTime\":121,\"JobRunId\":\"jr_23979da6941e7827c201ad2f8df01565e9aee76e281f4b71edce20b4a5d574a7\",\"JobRunState\":\"SUCCEEDED\"}}}",
+                "inputDetails": {
+                    "truncated": false
+                }
+            }
+        },
+        {
+            "timestamp": "2026-11-21T15:37:12.361000+05:30",
+            "type": "TaskScheduled",
+            "id": 19,
+            "previousEventId": 18,
+            "taskScheduledEventDetails": {
+                "resourceType": "glue",
+                "resource": "startJobRun.sync",
+                "region": "ap-southeast-2",
+                "parameters": "{\"JobName\":\"carevista-03-silver\",\"Arguments\":{\"--lake_root\":\"s3://carevista-919315337648-lake/carevista\",\"--batch_id\":\"B20260630\",\"--run_id\":\"run-20261121T153055-B20260630\",\"--input_path\":\"s3://carevista-919315337648-staging/carevista/2026-06-30\",\"--fail_once\":\"none\"}}"
+            }
+        },
+        {
+            "timestamp": "2026-11-21T15:37:12.444000+05:30",
+            "type": "TaskStarted",
+            "id": 20,
+            "previousEventId": 19,
+            "taskStartedEventDetails": {
+                "resourceType": "glue",
+                "resource": "startJobRun.sync"
+            }
+        },
+        {
+            "timestamp": "2026-11-21T15:37:12.604000+05:30",
+            "type": "TaskSubmitted",
+            "id": 21,
+            "previousEventId": 20,
+            "taskSubmittedEventDetails": {
+                "resourceType": "glue",
+                "resource": "startJobRun.sync",
+                "output": "{\"JobRunId\":\"jr_3f4e2d86c69e85170d9deb6eb858a1ab2238bba051c0a887cabaa74b63bae968\",\"SdkHttpMetadata\":{\"AllHttpHeaders\":{\"Cache-Control\":[\"no-cache\"],\"Connection\":[\"keep-alive\"],\"x-amzn-RequestId\":[\"0c55a152-3201-4112-abcc-cbe12d92a2fc\"],\"Content-Length\":[\"82\"],\"Date\":[\"Sat, 21 Nov 2026 10:07:12 GMT\"],\"Content-Type\":[\"application/x-amz-json-1.1\"]},\"HttpHeaders\":{\"Cache-Control\":\"no-cache\",\"Connection\":\"keep-alive\",\"Content-Length\":\"82\",\"Content-Type\":\"application/x-amz-json-1.1\",\"Date\":\"Sat, 21 Nov 2026 10:07:12 GMT\",\"x-amzn-RequestId\":\"0c55a152-3201-4112-abcc-cbe12d92a2fc\"},\"HttpStatusCode\":200},\"SdkResponseMetadata\":{\"RequestId\":\"0c55a152-3201-4112-abcc-cbe12d92a2fc\"},\"JobName\":\"carevista-03-silver\"}",
+                "outputDetails": {
+                    "truncated": false
+                }
+            }
+        },
+        {
+            "timestamp": "2026-11-21T15:41:19.013000+05:30",
+            "type": "TaskSucceeded",
+            "id": 22,
+            "previousEventId": 21,
+            "taskSucceededEventDetails": {
+                "resourceType": "glue",
+                "resource": "startJobRun.sync",
+                "output": "{\"AllocatedCapacity\":2,\"Arguments\":{\"--lake_root\":\"s3://carevista-919315337648-lake/carevista\",\"--batch_id\":\"B20260630\",\"--run_id\":\"run-20261121T153055-B20260630\",\"--input_path\":\"s3://carevista-919315337648-staging/carevista/2026-06-30\",\"--fail_once\":\"none\"},\"Attempt\":0,\"CompletedOn\":1795255820299,\"DPUSeconds\":361.0,\"ExecutionTime\":180,\"GlueVersion\":\"5.0\",\"Id\":\"jr_3f4e2d86c69e85170d9deb6eb858a1ab2238bba051c0a887cabaa74b63bae968\",\"JobMode\":\"SCRIPT\",\"JobName\":\"carevista-03-silver\",\"JobRunState\":\"SUCCEEDED\",\"LastModifiedOn\":1795255820299,\"LogGroupName\":\"/aws-glue/jobs\",\"MaxCapacity\":2.0,\"NumberOfWorkers\":2,\"PredecessorRuns\":[],\"StartedOn\":1795255632567,\"Timeout\":60,\"WorkerType\":\"G.1X\"}",
+                "outputDetails": {
+                    "truncated": false
+                }
+            }
+        },
+        {
+            "timestamp": "2026-11-21T15:41:19.023000+05:30",
+            "type": "TaskStateExited",
+            "id": 23,
+            "previousEventId": 22,
+            "stateExitedEventDetails": {
+                "name": "03_Silver",
+                "output": "{\"args\":{\"fail_once\":\"none\",\"batch_id\":\"B20260630\",\"lake_root\":\"s3://carevista-919315337648-lake/carevista\",\"input_path\":\"s3://carevista-919315337648-staging/carevista/2026-06-30\"},\"results\":{\"landing\":{\"ExecutionTime\":108,\"JobRunId\":\"jr_4e35b98d2f07f13f2117f3a82c5f217ae2d91a63baf26e231bc439f251d82cb7\",\"JobRunState\":\"SUCCEEDED\"},\"bronze\":{\"ExecutionTime\":121,\"JobRunId\":\"jr_23979da6941e7827c201ad2f8df01565e9aee76e281f4b71edce20b4a5d574a7\",\"JobRunState\":\"SUCCEEDED\"},\"silver\":{\"ExecutionTime\":180,\"JobRunId\":\"jr_3f4e2d86c69e85170d9deb6eb858a1ab2238bba051c0a887cabaa74b63bae968\",\"JobRunState\":\"SUCCEEDED\"}}}",
+                "outputDetails": {
+                    "truncated": false
+                }
+            }
+        },
+        {
+            "timestamp": "2026-11-21T15:41:19.023000+05:30",
+            "type": "TaskStateEntered",
+            "id": 24,
+            "previousEventId": 23,
+            "stateEnteredEventDetails": {
+                "name": "04_Gold",
+                "input": "{\"args\":{\"fail_once\":\"none\",\"batch_id\":\"B20260630\",\"lake_root\":\"s3://carevista-919315337648-lake/carevista\",\"input_path\":\"s3://carevista-919315337648-staging/carevista/2026-06-30\"},\"results\":{\"landing\":{\"ExecutionTime\":108,\"JobRunId\":\"jr_4e35b98d2f07f13f2117f3a82c5f217ae2d91a63baf26e231bc439f251d82cb7\",\"JobRunState\":\"SUCCEEDED\"},\"bronze\":{\"ExecutionTime\":121,\"JobRunId\":\"jr_23979da6941e7827c201ad2f8df01565e9aee76e281f4b71edce20b4a5d574a7\",\"JobRunState\":\"SUCCEEDED\"},\"silver\":{\"ExecutionTime\":180,\"JobRunId\":\"jr_3f4e2d86c69e85170d9deb6eb858a1ab2238bba051c0a887cabaa74b63bae968\",\"JobRunState\":\"SUCCEEDED\"}}}",
+                "inputDetails": {
+                    "truncated": false
+                }
+            }
+        },
+        {
+            "timestamp": "2026-11-21T15:41:19.023000+05:30",
+            "type": "TaskScheduled",
+            "id": 25,
+            "previousEventId": 24,
+            "taskScheduledEventDetails": {
+                "resourceType": "glue",
+                "resource": "startJobRun.sync",
+                "region": "ap-southeast-2",
+                "parameters": "{\"JobName\":\"carevista-04-gold\",\"Arguments\":{\"--lake_root\":\"s3://carevista-919315337648-lake/carevista\",\"--batch_id\":\"B20260630\",\"--run_id\":\"run-20261121T153055-B20260630\",\"--input_path\":\"s3://carevista-919315337648-staging/carevista/2026-06-30\",\"--fail_once\":\"none\"}}"
+            }
+        },
+        {
+            "timestamp": "2026-11-21T15:41:19.086000+05:30",
+            "type": "TaskStarted",
+            "id": 26,
+            "previousEventId": 25,
+            "taskStartedEventDetails": {
+                "resourceType": "glue",
+                "resource": "startJobRun.sync"
+            }
+        },
+        {
+            "timestamp": "2026-11-21T15:41:19.220000+05:30",
+            "type": "TaskSubmitted",
+            "id": 27,
+            "previousEventId": 26,
+            "taskSubmittedEventDetails": {
+                "resourceType": "glue",
+                "resource": "startJobRun.sync",
+                "output": "{\"JobRunId\":\"jr_1f118f8545c292248c7555a56d640c78f8af27c57849f24474173ad6a1b31e6d\",\"SdkHttpMetadata\":{\"AllHttpHeaders\":{\"Cache-Control\":[\"no-cache\"],\"Connection\":[\"keep-alive\"],\"x-amzn-RequestId\":[\"961d2744-d451-4a4a-81f8-43fb1b0c07ec\"],\"Content-Length\":[\"82\"],\"Date\":[\"Sat, 21 Nov 2026 10:11:19 GMT\"],\"Content-Type\":[\"application/x-amz-json-1.1\"]},\"HttpHeaders\":{\"Cache-Control\":\"no-cache\",\"Connection\":\"keep-alive\",\"Content-Length\":\"82\",\"Content-Type\":\"application/x-amz-json-1.1\",\"Date\":\"Sat, 21 Nov 2026 10:11:19 GMT\",\"x-amzn-RequestId\":\"961d2744-d451-4a4a-81f8-43fb1b0c07ec\"},\"HttpStatusCode\":200},\"SdkResponseMetadata\":{\"RequestId\":\"961d2744-d451-4a4a-81f8-43fb1b0c07ec\"},\"JobName\":\"carevista-04-gold\"}",
+                "outputDetails": {
+                    "truncated": false
+                }
+            }
+        },
+        {
+            "timestamp": "2026-11-21T15:45:17.598000+05:30",
+            "type": "TaskSucceeded",
+            "id": 28,
+            "previousEventId": 27,
+            "taskSucceededEventDetails": {
+                "resourceType": "glue",
+                "resource": "startJobRun.sync",
+                "output": "{\"AllocatedCapacity\":2,\"Arguments\":{\"--lake_root\":\"s3://carevista-919315337648-lake/carevista\",\"--batch_id\":\"B20260630\",\"--run_id\":\"run-20261121T153055-B20260630\",\"--input_path\":\"s3://carevista-919315337648-staging/carevista/2026-06-30\",\"--fail_once\":\"none\"},\"Attempt\":0,\"CompletedOn\":1795256072173,\"DPUSeconds\":373.0,\"ExecutionTime\":186,\"GlueVersion\":\"5.0\",\"Id\":\"jr_1f118f8545c292248c7555a56d640c78f8af27c57849f24474173ad6a1b31e6d\",\"JobMode\":\"SCRIPT\",\"JobName\":\"carevista-04-gold\",\"JobRunState\":\"SUCCEEDED\",\"LastModifiedOn\":1795256072173,\"LogGroupName\":\"/aws-glue/jobs\",\"MaxCapacity\":2.0,\"NumberOfWorkers\":2,\"PredecessorRuns\":[],\"StartedOn\":1795255879172,\"Timeout\":60,\"WorkerType\":\"G.1X\"}",
+                "outputDetails": {
+                    "truncated": false
+                }
+            }
+        },
+        {
+            "timestamp": "2026-11-21T15:45:17.610000+05:30",
+            "type": "TaskStateExited",
+            "id": 29,
+            "previousEventId": 28,
+            "stateExitedEventDetails": {
+                "name": "04_Gold",
+                "output": "{\"args\":{\"fail_once\":\"none\",\"batch_id\":\"B20260630\",\"lake_root\":\"s3://carevista-919315337648-lake/carevista\",\"input_path\":\"s3://carevista-919315337648-staging/carevista/2026-06-30\"},\"results\":{\"landing\":{\"ExecutionTime\":108,\"JobRunId\":\"jr_4e35b98d2f07f13f2117f3a82c5f217ae2d91a63baf26e231bc439f251d82cb7\",\"JobRunState\":\"SUCCEEDED\"},\"bronze\":{\"ExecutionTime\":121,\"JobRunId\":\"jr_23979da6941e7827c201ad2f8df01565e9aee76e281f4b71edce20b4a5d574a7\",\"JobRunState\":\"SUCCEEDED\"},\"silver\":{\"ExecutionTime\":180,\"JobRunId\":\"jr_3f4e2d86c69e85170d9deb6eb858a1ab2238bba051c0a887cabaa74b63bae968\",\"JobRunState\":\"SUCCEEDED\"},\"gold\":{\"ExecutionTime\":186,\"JobRunId\":\"jr_1f118f8545c292248c7555a56d640c78f8af27c57849f24474173ad6a1b31e6d\",\"JobRunState\":\"SUCCEEDED\"}}}",
+                "outputDetails": {
+                    "truncated": false
+                }
+            }
+        },
+        {
+            "timestamp": "2026-11-21T15:45:17.610000+05:30",
+            "type": "SucceedStateEntered",
+            "id": 30,
+            "previousEventId": 29,
+            "stateEnteredEventDetails": {
+                "name": "Succeeded",
+                "input": "{\"args\":{\"fail_once\":\"none\",\"batch_id\":\"B20260630\",\"lake_root\":\"s3://carevista-919315337648-lake/carevista\",\"input_path\":\"s3://carevista-919315337648-staging/carevista/2026-06-30\"},\"results\":{\"landing\":{\"ExecutionTime\":108,\"JobRunId\":\"jr_4e35b98d2f07f13f2117f3a82c5f217ae2d91a63baf26e231bc439f251d82cb7\",\"JobRunState\":\"SUCCEEDED\"},\"bronze\":{\"ExecutionTime\":121,\"JobRunId\":\"jr_23979da6941e7827c201ad2f8df01565e9aee76e281f4b71edce20b4a5d574a7\",\"JobRunState\":\"SUCCEEDED\"},\"silver\":{\"ExecutionTime\":180,\"JobRunId\":\"jr_3f4e2d86c69e85170d9deb6eb858a1ab2238bba051c0a887cabaa74b63bae968\",\"JobRunState\":\"SUCCEEDED\"},\"gold\":{\"ExecutionTime\":186,\"JobRunId\":\"jr_1f118f8545c292248c7555a56d640c78f8af27c57849f24474173ad6a1b31e6d\",\"JobRunState\":\"SUCCEEDED\"}}}",
+                "inputDetails": {
+                    "truncated": false
+                }
+            }
+        },
+        {
+            "timestamp": "2026-11-21T15:45:17.610000+05:30",
+            "type": "SucceedStateExited",
+            "id": 31,
+            "previousEventId": 30,
+            "stateExitedEventDetails": {
+                "name": "Succeeded",
+                "output": "{\"args\":{\"fail_once\":\"none\",\"batch_id\":\"B20260630\",\"lake_root\":\"s3://carevista-919315337648-lake/carevista\",\"input_path\":\"s3://carevista-919315337648-staging/carevista/2026-06-30\"},\"results\":{\"landing\":{\"ExecutionTime\":108,\"JobRunId\":\"jr_4e35b98d2f07f13f2117f3a82c5f217ae2d91a63baf26e231bc439f251d82cb7\",\"JobRunState\":\"SUCCEEDED\"},\"bronze\":{\"ExecutionTime\":121,\"JobRunId\":\"jr_23979da6941e7827c201ad2f8df01565e9aee76e281f4b71edce20b4a5d574a7\",\"JobRunState\":\"SUCCEEDED\"},\"silver\":{\"ExecutionTime\":180,\"JobRunId\":\"jr_3f4e2d86c69e85170d9deb6eb858a1ab2238bba051c0a887cabaa74b63bae968\",\"JobRunState\":\"SUCCEEDED\"},\"gold\":{\"ExecutionTime\":186,\"JobRunId\":\"jr_1f118f8545c292248c7555a56d640c78f8af27c57849f24474173ad6a1b31e6d\",\"JobRunState\":\"SUCCEEDED\"}}}",
+                "outputDetails": {
+                    "truncated": false
+                }
+            }
+        },
+        {
+            "timestamp": "2026-11-21T15:45:17.637000+05:30",
+            "type": "ExecutionSucceeded",
+            "id": 32,
+            "previousEventId": 31,
+            "executionSucceededEventDetails": {
+                "output": "{\"args\":{\"fail_once\":\"none\",\"batch_id\":\"B20260630\",\"lake_root\":\"s3://carevista-919315337648-lake/carevista\",\"input_path\":\"s3://carevista-919315337648-staging/carevista/2026-06-30\"},\"results\":{\"landing\":{\"ExecutionTime\":108,\"JobRunId\":\"jr_4e35b98d2f07f13f2117f3a82c5f217ae2d91a63baf26e231bc439f251d82cb7\",\"JobRunState\":\"SUCCEEDED\"},\"bronze\":{\"ExecutionTime\":121,\"JobRunId\":\"jr_23979da6941e7827c201ad2f8df01565e9aee76e281f4b71edce20b4a5d574a7\",\"JobRunState\":\"SUCCEEDED\"},\"silver\":{\"ExecutionTime\":180,\"JobRunId\":\"jr_3f4e2d86c69e85170d9deb6eb858a1ab2238bba051c0a887cabaa74b63bae968\",\"JobRunState\":\"SUCCEEDED\"},\"gold\":{\"ExecutionTime\":186,\"JobRunId\":\"jr_1f118f8545c292248c7555a56d640c78f8af27c57849f24474173ad6a1b31e6d\",\"JobRunState\":\"SUCCEEDED\"}}}",
+                "outputDetails": {
+                    "truncated": false
+                }
+            }
+        }
+    ]
+}

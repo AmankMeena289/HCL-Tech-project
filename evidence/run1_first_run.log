@@ -1,0 +1,30 @@
+=== Run 20261121T054110-38695e | batch_id=B20260630 | input_path=/mnt/d/Desktop/meena/data/source ===
+[landing] patients.csv: 13396 bytes copied, sha256 f38c8c25abee... verified
+[landing] services.csv: 1111 bytes copied, sha256 ff4e1e85b1b2... verified
+[landing] encounters.csv: 22591 bytes copied, sha256 08a84b5cdb53... verified
+[landing] encounter_services.csv: 25894 bytes copied, sha256 39bf774ccdaa... verified
+--- task=landing attempt=1 status=Succeeded
+[bronze] patients.csv: 113 rows loaded into bronze/patients
+[bronze] services.csv: 22 rows loaded into bronze/services
+[bronze] encounters.csv: 208 rows loaded into bronze/encounters
+[bronze] encounter_services.csv: 572 rows loaded into bronze/encounter_services
+--- task=bronze attempt=1 status=Succeeded
+[silver] patients.csv: read=113 accepted=100 rejected=13 (SUPERSEDED_VERSION=6; EXACT_DUPLICATE=5; P1_BLANK_PATIENT_ID=2)
+[silver] services.csv: read=22 accepted=20 rejected=2 (EXACT_DUPLICATE=2)
+[silver] encounters.csv: read=208 accepted=194 rejected=14 (EXACT_DUPLICATE=6; E3_UNKNOWN_PATIENT=5; E3_DISCHARGE_BEFORE_ADMIT=3)
+[silver] encounter_services.csv: read=572 accepted=531 rejected=41 (L4_ENCOUNTER_REJECTED=16; EXACT_DUPLICATE=8; L2_NON_POSITIVE_QUANTITY=4; L4_UNKNOWN_ENCOUNTER=4; L2_DISCOUNT_OUT_OF_RANGE=3; L2_NEGATIVE_UNIT_PRICE=3; L4_UNKNOWN_SERVICE=3)
+--- task=silver attempt=1 status=Succeeded
+[gold] dim_patient: 100 rows
+[gold] dim_service: 20 rows
+[gold] dim_hospital: 6 rows
+[gold] fct_encounter: 194 rows
+[gold] fct_billing_line: 531 rows
+[gold] kpi1_revenue_by_department_month: 36 rows
+[gold] kpi2_hospital_encounter_type: 18 rows
+[gold] kpi3_top10_patients: 10 rows
+[gold] kpi4_patient_category_profile: 3 rows
+[gold] kpi5_inpatient_length_of_stay: 6 rows
+[gold] kpi6_region_service_category_mix: 15 rows
+--- task=gold attempt=1 status=Succeeded
+=== Run 20261121T054110-38695e SUCCEEDED ===
+[report] written to /mnt/d/Desktop/meena/reports

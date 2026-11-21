@@ -1,0 +1,120 @@
+{
+  "Comment": "CareVista healthcare analytics: landing -> bronze -> silver -> gold. One retry per task (60 s apart). Rerunning the same batch_id gives the same result. On final failure an SNS alert is sent.",
+  "StartAt": "ApplyDefaults",
+  "States": {
+    "ApplyDefaults": {
+      "Type": "Pass",
+      "Comment": "Any of batch_id / input_path / lake_root / fail_once may be omitted from the execution input.",
+      "Parameters": {
+        "defaults": {
+          "batch_id": "B20260630",
+          "input_path": "s3://__STAGING_BUCKET__/carevista/2026-06-30",
+          "lake_root": "s3://__LAKE_BUCKET__/carevista",
+          "fail_once": "none"
+        },
+        "input.$": "$$.Execution.Input"
+      },
+      "Next": "MergeInput"
+    },
+    "MergeInput": {
+      "Type": "Pass",
+      "Parameters": {
+        "args.$": "States.JsonMerge($.defaults, $.input, false)"
+      },
+      "Next": "01_Landing"
+    },
+    "01_Landing": {
+      "Type": "Task",
+      "Comment": "Copy the 4 staged files unchanged to landing/batch_id=<id>/ and verify SHA-256",
+      "Resource": "arn:aws:states:::glue:startJobRun.sync",
+      "Parameters": {
+        "JobName": "__PREFIX__-01-landing",
+        "Arguments": {
+          "--input_path.$": "$.args.input_path",
+          "--batch_id.$": "$.args.batch_id",
+          "--lake_root.$": "$.args.lake_root",
+          "--fail_once.$": "$.args.fail_once",
+          "--run_id.$": "$$.Execution.Name"
+        }
+      },
+      "ResultSelector": { "JobRunId.$": "$.Id", "JobRunState.$": "$.JobRunState", "ExecutionTime.$": "$.ExecutionTime" },
+      "ResultPath": "$.results.landing",
+      "Retry": [ { "ErrorEquals": ["States.ALL"], "IntervalSeconds": 60, "MaxAttempts": 1, "BackoffRate": 1.0 } ],
+      "Catch": [ { "ErrorEquals": ["States.ALL"], "ResultPath": "$.error", "Next": "NotifyFailure" } ],
+      "Next": "02_Bronze"
+    },
+    "02_Bronze": {
+      "Type": "Task",
+      "Comment": "Load landed CSVs as text into bronze Delta tables with batch_id, source_file, source_row_num",
+      "Resource": "arn:aws:states:::glue:startJobRun.sync",
+      "Parameters": {
+        "JobName": "__PREFIX__-02-bronze",
+        "Arguments": {
+          "--input_path.$": "$.args.input_path",
+          "--batch_id.$": "$.args.batch_id",
+          "--lake_root.$": "$.args.lake_root",
+          "--fail_once.$": "$.args.fail_once",
+          "--run_id.$": "$$.Execution.Name"
+        }
+      },
+      "ResultSelector": { "JobRunId.$": "$.Id", "JobRunState.$": "$.JobRunState", "ExecutionTime.$": "$.ExecutionTime" },
+      "ResultPath": "$.results.bronze",
+      "Retry": [ { "ErrorEquals": ["States.ALL"], "IntervalSeconds": 60, "MaxAttempts": 1, "BackoffRate": 1.0 } ],
+      "Catch": [ { "ErrorEquals": ["States.ALL"], "ResultPath": "$.error", "Next": "NotifyFailure" } ],
+      "Next": "03_Silver"
+    },
+    "03_Silver": {
+      "Type": "Task",
+      "Comment": "Cleanse, validate, de-duplicate; write silver + quarantine (overwrite) and audit counts",
+      "Resource": "arn:aws:states:::glue:startJobRun.sync",
+      "Parameters": {
+        "JobName": "__PREFIX__-03-silver",
+        "Arguments": {
+          "--input_path.$": "$.args.input_path",
+          "--batch_id.$": "$.args.batch_id",
+          "--lake_root.$": "$.args.lake_root",
+          "--fail_once.$": "$.args.fail_once",
+          "--run_id.$": "$$.Execution.Name"
+        }
+      },
+      "ResultSelector": { "JobRunId.$": "$.Id", "JobRunState.$": "$.JobRunState", "ExecutionTime.$": "$.ExecutionTime" },
+      "ResultPath": "$.results.silver",
+      "Retry": [ { "ErrorEquals": ["States.ALL"], "IntervalSeconds": 60, "MaxAttempts": 1, "BackoffRate": 1.0 } ],
+      "Catch": [ { "ErrorEquals": ["States.ALL"], "ResultPath": "$.error", "Next": "NotifyFailure" } ],
+      "Next": "04_Gold"
+    },
+    "04_Gold": {
+      "Type": "Task",
+      "Comment": "Build star schema and KPI tables (overwrite), then publish the KPI report",
+      "Resource": "arn:aws:states:::glue:startJobRun.sync",
+      "Parameters": {
+        "JobName": "__PREFIX__-04-gold",
+        "Arguments": {
+          "--input_path.$": "$.args.input_path",
+          "--batch_id.$": "$.args.batch_id",
+          "--lake_root.$": "$.args.lake_root",
+          "--fail_once.$": "$.args.fail_once",
+          "--run_id.$": "$$.Execution.Name"
+        }
+      },
+      "ResultSelector": { "JobRunId.$": "$.Id", "JobRunState.$": "$.JobRunState", "ExecutionTime.$": "$.ExecutionTime" },
+      "ResultPath": "$.results.gold",
+      "Retry": [ { "ErrorEquals": ["States.ALL"], "IntervalSeconds": 60, "MaxAttempts": 1, "BackoffRate": 1.0 } ],
+      "Catch": [ { "ErrorEquals": ["States.ALL"], "ResultPath": "$.error", "Next": "NotifyFailure" } ],
+      "Next": "Succeeded"
+    },
+    "Succeeded": { "Type": "Succeed" },
+    "NotifyFailure": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::sns:publish",
+      "Parameters": {
+        "TopicArn": "__TOPIC_ARN__",
+        "Subject": "CareVista pipeline FAILED",
+        "Message.$": "States.Format('CareVista pipeline run {} failed for batch {} after the retry. Error: {} Cause: {}', $$.Execution.Name, $.args.batch_id, $.error.Error, $.error.Cause)"
+      },
+      "ResultPath": null,
+      "Next": "Failed"
+    },
+    "Failed": { "Type": "Fail", "Error": "PipelineFailed", "Cause": "A task failed after its retry. See the execution history and the Glue job logs." }
+  }
+}

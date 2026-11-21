@@ -1,0 +1,4 @@
+patient_category,patients,patients_with_eligible_encounters,eligible_encounters,billed_amount,average_bill
+SelfPay,35,23,46,735921.85,15998.30
+Insured,44,31,87,1327835.80,15262.48
+Corporate,21,12,35,473945.80,13541.31

@@ -1,0 +1,29 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ListCareVistaBuckets",
+      "Effect": "Allow",
+      "Action": ["s3:ListBucket", "s3:GetBucketLocation"],
+      "Resource": ["arn:aws:s3:::__STAGING_BUCKET__", "arn:aws:s3:::__LAKE_BUCKET__", "arn:aws:s3:::__ARTIFACTS_BUCKET__"]
+    },
+    {
+      "Sid": "ReadStagingAndCode",
+      "Effect": "Allow",
+      "Action": ["s3:GetObject"],
+      "Resource": ["arn:aws:s3:::__STAGING_BUCKET__/*", "arn:aws:s3:::__ARTIFACTS_BUCKET__/*"]
+    },
+    {
+      "Sid": "ReadWriteLake",
+      "Effect": "Allow",
+      "Action": ["s3:GetObject", "s3:PutObject", "s3:DeleteObject"],
+      "Resource": ["arn:aws:s3:::__LAKE_BUCKET__/*"]
+    },
+    {
+      "Sid": "GlueTempDir",
+      "Effect": "Allow",
+      "Action": ["s3:PutObject", "s3:DeleteObject"],
+      "Resource": ["arn:aws:s3:::__ARTIFACTS_BUCKET__/glue-temp/*", "arn:aws:s3:::__ARTIFACTS_BUCKET__/spark-logs/*"]
+    }
+  ]
+}

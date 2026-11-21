@@ -1,0 +1,8 @@
+lake/
+spark-warehouse/
+metastore_db/
+derby.log
+__pycache__/
+*.pyc
+.pytest_cache/
+deploy/aws/build/

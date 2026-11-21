@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CareVista Billing KPIs</title>
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <div class="page">
+    <header class="masthead" id="top">
+      <p class="eyebrow">CareVista Health Network · Healthcare billing analytics on AWS</p>
+      <h1>CareVista Billing KPIs</h1>
+      <p class="lede" id="lede">Loading results…</p>
+      <dl class="facts" id="facts"></dl>
+      <nav class="jump" aria-label="Sections">
+        <a href="#pipeline">Pipeline</a>
+        <a href="#checks">Evaluation checks</a>
+        <a href="#quality">Data quality</a>
+        <a href="#kpis">KPIs</a>
+        <a href="#aws">AWS resources</a>
+        <a href="#downloads">Downloads</a>
+      </nav>
+    </header>
+
+    <div class="banner" id="banner" hidden></div>
+
+    <section class="section" id="pipeline">
+      <div class="section-head">
+        <h2>Pipeline run on AWS</h2>
+        <p class="note">AWS Step Functions runs four AWS Glue jobs (PySpark + Delta Lake) in order. Each step is retried once; a second failure sends an SNS alert.</p>
+      </div>
+      <div class="card">
+        <div class="progress">
+          <div class="progress-figure"><span id="pct">—</span><small>% complete</small></div>
+          <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" id="pct-bar"><i></i></div>
+          <div class="progress-meta" id="run-meta"></div>
+        </div>
+        <ol class="steps" id="steps"></ol>
+      </div>
+    </section>
+
+    <section class="section" id="checks">
+      <div class="section-head">
+        <h2>Evaluation checks</h2>
+        <p class="note">Each check is worked out in your browser from the exported AWS results, not typed in.</p>
+      </div>
+      <ul class="checks" id="check-list"></ul>
+    </section>
+
+    <section class="section" id="totals">
+      <div class="section-head"><h2>Batch totals</h2></div>
+      <div class="tiles" id="tiles"></div>
+    </section>
+
+    <section class="section" id="quality">
+      <div class="section-head">
+        <h2>Data quality: rows accepted and rejected per file</h2>
+        <p class="note">From the silver step's audit table (queried with Athena). Rejected rows are kept in quarantine with the reason.</p>
+      </div>
+      <div class="card table-wrap">
+        <table class="table" id="audit-table">
+          <thead><tr><th>File</th><th class="num">Rows read</th><th class="num">Accepted</th><th class="num">Rejected</th><th class="num">Accepted %</th><th>Balances</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section" id="kpis">
+      <div class="section-head">
+        <h2>KPIs</h2>
+        <p class="note">All amounts are INR excluding tax, eligible encounters only (rule E4). Point at a bar to see its value.</p>
+      </div>
+
+      <article class="card kpi" id="kpi1">
+        <h3><span class="tag">KPI 1</span> Billed revenue by department per month</h3>
+        <div class="chart" id="kpi1-chart"></div>
+      </article>
+
+      <div class="grid2">
+        <article class="card kpi" id="kpi3">
+          <h3><span class="tag">KPI 3</span> Top ten patients by billed amount</h3>
+          <div class="chart" id="kpi3-chart"></div>
+          <p class="note">Patient IDs only: names, email and phone never reach the gold layer.</p>
+        </article>
+        <article class="card kpi" id="kpi5">
+          <h3><span class="tag stretch">KPI 5</span> Inpatient length of stay by hospital</h3>
+          <div class="chart" id="kpi5-chart"></div>
+          <p class="note">Bar: average stay. Black tick: longest stay. Days.</p>
+        </article>
+      </div>
+
+      <article class="card kpi" id="kpi2">
+        <h3><span class="tag">KPI 2</span> Encounters and average bill by hospital and encounter type</h3>
+        <div class="chart" id="kpi2-chart"></div>
+        <p class="note">Bars: average bill (₹) per encounter type. Numbers under each bar: eligible encounters.</p>
+        <div class="table-wrap">
+          <table class="table" id="kpi2-table">
+            <thead><tr><th>Hospital</th><th>Type</th><th class="num">Encounters</th><th class="num">Billed (₹)</th><th class="num">Average bill (₹)</th><th class="bar-col">Average bill</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </article>
+
+      <div class="grid2">
+        <article class="card kpi" id="kpi4">
+          <h3><span class="tag">KPI 4</span> Patient category profile</h3>
+          <div class="chart is-short" id="kpi4-chart"></div>
+          <div class="table-wrap">
+            <table class="table" id="kpi4-table">
+              <thead><tr><th>Category</th><th class="num">Patients</th><th class="num">Billed patients</th><th class="num">Encounters</th><th class="num">Billed (₹)</th><th class="num">Avg bill (₹)</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </article>
+        <article class="card kpi" id="kpi6">
+          <h3><span class="tag stretch">KPI 6</span> Revenue mix by region and service category</h3>
+          <div class="chart" id="kpi6-chart"></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="aws">
+      <div class="section-head"><h2>AWS resources</h2></div>
+      <div class="card table-wrap">
+        <table class="table" id="res-table">
+          <thead><tr><th>Service</th><th>Name</th><th>Purpose</th><th>Status</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section" id="downloads">
+      <div class="section-head">
+        <h2>Downloads</h2>
+        <p class="note">The files the gold step published to S3, copied here by the export.</p>
+      </div>
+      <ul class="downloads" id="download-list"></ul>
+    </section>
+
+    <details class="defs card">
+      <summary>Definitions and rules behind these numbers</summary>
+      <dl>
+        <dt>Eligible encounter (rule E4)</dt>
+        <dd>Completed, with a valid patient and hospital, discharged on or before 30 June 2026 23:59:59. Only these count toward revenue.</dd>
+        <dt>Billed revenue</dt>
+        <dd>Sum of billing-line charges (quantity × unit price, less discount) in INR, excluding tax.</dd>
+        <dt>Quarantine</dt>
+        <dd>Rows that break a cleansing rule (P1–P3 patients, S1–S2 services, E1–E4 encounters, L1–L4 billing lines) are kept with the reason instead of being deleted.</dd>
+        <dt>Rerun safety</dt>
+        <dd>Running the same batch again replaces that batch's rows, so nothing is counted twice.</dd>
+      </dl>
+    </details>
+
+    <footer class="foot" id="foot"></footer>
+  </div>
+  <div class="tip" id="tip" hidden></div>
+  <script src="app.js"></script>
+</body>
+</html>

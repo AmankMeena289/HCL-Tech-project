@@ -1,0 +1,19 @@
+{
+    "executionArn": "arn:aws:states:ap-southeast-2:919315337648:execution:carevista-daily:run-20261121T153055-B20260630",
+    "stateMachineArn": "arn:aws:states:ap-southeast-2:919315337648:stateMachine:carevista-daily",
+    "name": "run-20261121T153055-B20260630",
+    "status": "SUCCEEDED",
+    "startDate": "2026-11-21T15:31:11.266000+05:30",
+    "stopDate": "2026-11-21T15:45:17.637000+05:30",
+    "input": "{\"batch_id\":\"B20260630\",\"fail_once\":\"none\"}",
+    "inputDetails": {
+        "included": true
+    },
+    "output": "{\"args\":{\"fail_once\":\"none\",\"batch_id\":\"B20260630\",\"lake_root\":\"s3://carevista-919315337648-lake/carevista\",\"input_path\":\"s3://carevista-919315337648-staging/carevista/2026-06-30\"},\"results\":{\"landing\":{\"ExecutionTime\":108,\"JobRunId\":\"jr_4e35b98d2f07f13f2117f3a82c5f217ae2d91a63baf26e231bc439f251d82cb7\",\"JobRunState\":\"SUCCEEDED\"},\"bronze\":{\"ExecutionTime\":121,\"JobRunId\":\"jr_23979da6941e7827c201ad2f8df01565e9aee76e281f4b71edce20b4a5d574a7\",\"JobRunState\":\"SUCCEEDED\"},\"silver\":{\"ExecutionTime\":180,\"JobRunId\":\"jr_3f4e2d86c69e85170d9deb6eb858a1ab2238bba051c0a887cabaa74b63bae968\",\"JobRunState\":\"SUCCEEDED\"},\"gold\":{\"ExecutionTime\":186,\"JobRunId\":\"jr_1f118f8545c292248c7555a56d640c78f8af27c57849f24474173ad6a1b31e6d\",\"JobRunState\":\"SUCCEEDED\"}}}",
+    "outputDetails": {
+        "included": true
+    },
+    "redriveCount": 0,
+    "redriveStatus": "NOT_REDRIVABLE",
+    "redriveStatusReason": "Execution is SUCCEEDED and cannot be redriven"
+}

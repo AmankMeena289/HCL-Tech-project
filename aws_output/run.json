@@ -1,0 +1,103 @@
+{
+  "batch_id": "B20260630",
+  "status": "SUCCEEDED",
+  "execution": "run-20261121T153055-B20260630",
+  "account": "919315337648",
+  "region": "ap-southeast-2",
+  "total_minutes": "14.1",
+  "steps": [
+    {
+      "name": "Landing",
+      "status": "Succeeded",
+      "duration": "3m 03s",
+      "job": "carevista-01-landing"
+    },
+    {
+      "name": "Bronze",
+      "status": "Succeeded",
+      "duration": "2m 57s",
+      "job": "carevista-02-bronze"
+    },
+    {
+      "name": "Silver",
+      "status": "Succeeded",
+      "duration": "4m 06s",
+      "job": "carevista-03-silver"
+    },
+    {
+      "name": "Gold",
+      "status": "Succeeded",
+      "duration": "3m 58s",
+      "job": "carevista-04-gold"
+    }
+  ],
+  "audit": [
+    {
+      "source_file": "encounter_services.csv",
+      "rows_read": 572,
+      "rows_accepted": 531,
+      "rows_rejected": 41,
+      "detail": "L4_ENCOUNTER_REJECTED=16; EXACT_DUPLICATE=8; L2_NON_POSITIVE_QUANTITY=4; L4_UNKNOWN_ENCOUNTER=4; L2_DISCOUNT_OUT_OF_RANGE=3; L2_NEGATIVE_UNIT_PRICE=3; L4_UNKNOWN_SERVICE=3"
+    },
+    {
+      "source_file": "encounters.csv",
+      "rows_read": 208,
+      "rows_accepted": 194,
+      "rows_rejected": 14,
+      "detail": "EXACT_DUPLICATE=6; E3_UNKNOWN_PATIENT=5; E3_DISCHARGE_BEFORE_ADMIT=3"
+    },
+    {
+      "source_file": "patients.csv",
+      "rows_read": 113,
+      "rows_accepted": 100,
+      "rows_rejected": 13,
+      "detail": "SUPERSEDED_VERSION=6; EXACT_DUPLICATE=5; P1_BLANK_PATIENT_ID=2"
+    },
+    {
+      "source_file": "services.csv",
+      "rows_read": 22,
+      "rows_accepted": 20,
+      "rows_rejected": 2,
+      "detail": "EXACT_DUPLICATE=2"
+    }
+  ],
+  "reports_uri": "s3://carevista-919315337648-lake/carevista/reports/",
+  "checks": [
+    "All 6 KPI outputs from AWS are byte-for-byte identical to the verified local run",
+    "168 eligible encounters, INR 2,537,703.45 billed (matches README)",
+    "Audit counts match: 113/100/13, 22/20/2, 208/194/14, 572/531/41",
+    "Rows read = accepted + quarantined for every file (silver check passed)",
+    "Landing copies verified by SHA-256 against the staged source files",
+    "No names, emails or phone numbers in any KPI table"
+  ],
+  "resources": [
+    [
+      "Workflow",
+      "Step Functions: carevista-daily"
+    ],
+    [
+      "Compute",
+      "Glue 5.0 jobs: carevista-01-landing ... 04-gold"
+    ],
+    [
+      "Storage",
+      "S3: carevista-919315337648-{staging,lake,artifacts}"
+    ],
+    [
+      "Query",
+      "Athena workgroup carevista; Glue DBs carevista_gold, carevista_ops"
+    ],
+    [
+      "Alerts",
+      "SNS: carevista-pipeline-alerts"
+    ],
+    [
+      "IAM user",
+      "carevista-deployer (CLI profile: carevista)"
+    ],
+    [
+      "IAM roles",
+      "carevista-glue-role, carevista-sfn-role"
+    ]
+  ]
+}

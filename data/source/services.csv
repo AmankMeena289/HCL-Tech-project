@@ -1,0 +1,23 @@
+service_id,service_name,service_category,department
+SV020,Private Room per day,Accommodation,Room & Nursing
+SV001,General Consultation,Consultation,Consultation
+SV019,Semi-Private Room per day,Accommodation,Room & Nursing
+SV005,Complete Blood Count,Diagnostic,Laboratory
+SV004,Emergency Triage Consultation,Consultation,Consultation
+SV010,Ultrasound Abdomen,Diagnostic,radiology
+SV013,Antibiotic Course,Medication,Pharmacy
+SV010,Ultrasound Abdomen,Diagnostic,radiology
+SV011,ECG,Diagnostic,Radiology
+SV015,Minor Suture,Procedure,Procedures
+SV003,Cardiology Consultation,Consultation,Consultation
+SV018,General Ward per day,Accommodation,Room & Nursing
+SV012,IV Fluids,Medication,pharmacy
+SV002,Specialist Consultation,Consultation,consultation
+SV016,Fracture Fixation,Procedure,Procedures
+SV009,Chest X-Ray,Diagnostic,Radiology
+SV005,Complete Blood Count,Diagnostic,Laboratory
+SV014,Analgesic Pack,Medication,Pharmacy
+SV006,Lipid Profile,Diagnostic,Laboratory
+SV017,Appendectomy,Procedure,Procedures
+SV007,HbA1c Test,Diagnostic,Laboratory
+SV008,Kidney Function Test,Diagnostic,Laboratory

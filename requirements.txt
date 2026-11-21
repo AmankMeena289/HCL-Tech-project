@@ -1,0 +1,5 @@
+# Local run and tests (Python 3.10-3.12, Java 17)
+pyspark==3.5.3
+delta-spark==3.2.1
+pandas>=2.0
+pytest>=8.0
